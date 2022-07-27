@@ -1,5 +1,6 @@
 import INav from "../types/interface";
-import "./navigation.scss";
+import Garage from "./garage/garage";
+import Winners from "./winners/winners";
 
 class Navigation implements INav {
   garage: HTMLElement;
@@ -14,7 +15,11 @@ class Navigation implements INav {
 
   nav: HTMLElement;
 
-  container: HTMLDivElement;
+  win: Winners;
+
+  gar: Garage;
+
+  main: HTMLElement;
 
   constructor() {
     this.body = document.body;
@@ -22,14 +27,15 @@ class Navigation implements INav {
     this.garage = document.createElement("section");
     this.btnWinners = document.createElement("button");
     this.btnGarage = document.createElement("button");
-    this.container = document.createElement("div");
     this.nav = document.createElement("nav");
+    this.main = document.createElement("main");
+    this.win = new Winners();
+    this.gar = new Garage();
   }
 
   createNav(): void {
-    this.body.append(this.container);
-    this.container.append(this.nav);
-    this.container.className = "container";
+    this.body.append(this.nav);
+    this.body.append(this.main);
     this.nav.className = "nav";
     this.btnGarage.className = "btnGarage";
     this.btnWinners.className = "btnWinners";
@@ -40,15 +46,20 @@ class Navigation implements INav {
   }
 
   createGarage(): void {
-    this.body.append(this.container);
-    this.container.append(this.garage);
+    this.main.append(this.garage);
     this.garage.id = "garage";
+    this.garage.innerHTML = "garage";
   }
 
   createWinners(): void {
-    this.body.append(this.container);
-    this.container.append(this.winners);
+    this.main.append(this.winners);
     this.winners.id = "winners";
+    this.winners.innerHTML = "winners";
+  }
+
+  clickBtn(): void {
+    this.gar.clickBtnGarage();
+    this.win.clickBtnWinners();
   }
 }
 

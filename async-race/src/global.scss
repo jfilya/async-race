@@ -1,3 +1,6 @@
+@import "./components/navigation.scss";
+@import "./components/garage/garage.scss";
+@import "./components/winners/winners.scss";
 *{
     box-sizing:border-box;
     text-size-adjust: none;
@@ -22,6 +25,7 @@ body{
     position:relative;
     overflow-x:hidden;
     background-color: rgb(0, 0, 0);
+    color: white;
 }
 input{
     outline:none;
@@ -32,8 +36,6 @@ button{
     background: transparent;
     border:none;
 }
-.container{
-    max-width: 1250px;
-    padding: 0 10px;
-    margin:0 auto;
+.main{
+    position: relative;
 }

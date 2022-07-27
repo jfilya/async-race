@@ -5,3 +5,4 @@ const nav = new Navigation();
 nav.createNav();
 nav.createGarage();
 nav.createWinners();
+nav.clickBtn();

@@ -1,0 +1,9 @@
+#garage{
+    z-index: 2;
+    visibility: visible;
+    position: absolute;
+}
+#garage.notActive{
+    z-index: -1;
+    visibility: hidden;
+}

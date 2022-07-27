@@ -1,14 +1,18 @@
-// import "./winners.scss";
+/* eslint-disable @typescript-eslint/comma-dangle */
+class Winners {
+  // constructor() {}
 
-// class Winners {
-//   win: HTMLDivElement;
+  clickBtnWinners(): void {
+    const btnWinners = document.querySelector(
+      ".btnWinners"
+    ) as HTMLButtonElement;
+    const garage = document.querySelector("#garage") as HTMLElement;
+    const winners = document.querySelector("#winners") as HTMLElement;
+    btnWinners.onclick = () => {
+      garage.classList.add("notActive");
+      winners.classList.add("active");
+    };
+  }
+}
 
-//   constructor() {
-//     this.win = document.createElement("div");
-//   }
-
-//   //   createWinTable(): void {
-
-//   //   }
-// }
-// export default Winners;
+export default Winners;

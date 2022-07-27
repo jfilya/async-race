@@ -5,6 +5,6 @@ interface INav {
   btnWinners: HTMLButtonElement;
   btnGarage: HTMLButtonElement;
   nav: HTMLElement;
-  container: HTMLDivElement;
+  main: HTMLElement;
 }
 export default INav;
