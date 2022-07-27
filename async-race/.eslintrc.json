@@ -26,6 +26,7 @@
       "@typescript-eslint/no-var-requires": "error",
       "@typescript-eslint/no-explicit-any": 2,
       "linebreak-style": 0,
+      "quotes": ["error", "double"],
       "prettier/prettier": [
           "error",
           {
