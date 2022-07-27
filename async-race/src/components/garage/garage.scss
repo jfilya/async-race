@@ -1,9 +1,33 @@
-#garage{
-    z-index: 2;
-    visibility: visible;
-    position: absolute;
+#garage {
+  z-index: 2;
+  visibility: visible;
+  position: absolute;
 }
-#garage.notActive{
-    z-index: -1;
-    visibility: hidden;
+#garage.notActive {
+  z-index: -1;
+  visibility: hidden;
+}
+.create,
+.update,
+.allBtn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  [type="text"],
+  [type="submit"] {
+    padding: 4px;
+  }
+  [type="text"] {
+    width: 120px;
+  }
+  [type="submit"] {
+    cursor: pointer;
+  }
+}
+.allBtn {
+  [type="submit"] {
+    background: blueviolet;
+    width: 100%;
+  }
 }

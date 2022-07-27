@@ -1,5 +1,3 @@
-import "./garage.scss";
-
 class Garage {
   // constructor() {}
 
@@ -11,6 +9,26 @@ class Garage {
       garage.classList.remove("notActive");
       winners.classList.remove("active");
     };
+  }
+
+  createInput(): void {
+    const garage = document.querySelector("#garage") as HTMLElement;
+
+    garage.innerHTML = `<div class="create">
+      <input type="text">
+      <input type="color" value="#ffffff">
+      <input type="submit" value="create">
+    </div>
+    <div class="update">  
+      <input type="text">
+      <input type="color" value="#ffffff">
+      <input type="submit" value="update">
+    </div>
+    <div class="allBtn">  
+      <input type="submit" value="race">
+      <input type="submit" value="reset">
+      <input type="submit" value="generate cars">
+  </div>`;
   }
 }
 export default Garage;
