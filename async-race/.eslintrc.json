@@ -6,7 +6,8 @@
       "plugin:@typescript-eslint/recommended-requiring-type-checking",
       "plugin:prettier/recommended",
       "prettier",
-      "airbnb"
+      "airbnb",
+      "airbnb-typescript"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -26,7 +27,9 @@
       "@typescript-eslint/no-var-requires": "error",
       "@typescript-eslint/no-explicit-any": 2,
       "linebreak-style": 0,
+      "import/no-unresolved": 0,
       "quotes": ["error", "double"],
+      "@typescript-eslint/quotes": ["error", "double"],
       "prettier/prettier": [
           "error",
           {
