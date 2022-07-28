@@ -7,11 +7,14 @@ class Garage {
 
   winners: string;
 
+  cars: { [key: string]: string }[];
+
   constructor() {
     this.baseUrl = "http://127.0.0.1:3000";
     this.garage = `${this.baseUrl}/garage`;
     this.engine = `${this.baseUrl}/engine`;
     this.winners = `${this.baseUrl}/winners`;
+    this.cars = [];
   }
 
   clickBtnGarage(): void {
@@ -27,13 +30,13 @@ class Garage {
   createInput(): void {
     const inputs = document.querySelector(".inputs") as HTMLDivElement;
     inputs.innerHTML = `<div class="create">
-      <input type="text">
-      <input type="color" value="#ffffff">
-      <input type="submit" value="create">
+      <input type="text" id="name">
+      <input type="color" id="color" value="#ffffff">
+      <input type="submit" value="create" id="create">
     </div>
     <div class="update">  
-      <input type="text">
-      <input type="color" value="#ffffff">
+      <input type="text" id="name">
+      <input type="color" id="color" value="#ffffff">
       <input type="submit" value="update">
     </div>
     <div class="allBtn">  
@@ -47,11 +50,13 @@ class Garage {
     const get = async () => {
       const response = await fetch(`${this.garage}`);
       const content = await response.text();
-      const cars = JSON.parse(content) as { [key: string]: string }[];
+      this.cars = JSON.parse(content) as { [key: string]: string }[];
       const sTitle = document.querySelector(".amountItems") as HTMLSpanElement;
-      sTitle.innerHTML = `(${cars.length})`;
+      sTitle.innerHTML = `(${this.cars.length})`;
+      const cars = document.querySelector(".carsTable") as HTMLDivElement;
+      cars.innerHTML = "";
       // eslint-disable-next-line no-restricted-syntax
-      for (const car of cars) {
+      for (const car of this.cars) {
         this.renderCar(car.id, car.name, car.color);
       }
     };
@@ -87,6 +92,33 @@ class Garage {
     </div>
     </div>         
     `;
+  }
+
+  post = async (el: { name: string; color: string }) => {
+    await fetch(`${this.garage}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+      body: JSON.stringify(el),
+    });
+  };
+
+  getArr() {
+    (document.getElementById("create") as HTMLInputElement).onclick = () => {
+      const createName = document.querySelector("#name") as HTMLInputElement;
+      const createColor = document.querySelector("#color") as HTMLInputElement;
+      const obj: { name: string; color: string } = {
+        name: "",
+        color: "",
+      };
+      obj.name = createName.value;
+      obj.color = createColor.value;
+
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      this.post(obj);
+      this.buildCarTable();
+    };
   }
 }
 export default Garage;

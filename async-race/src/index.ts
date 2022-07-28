@@ -10,3 +10,4 @@ nav.clickBtn();
 const garage = new Garage();
 garage.createInput();
 garage.buildCarTable();
+garage.getArr();
