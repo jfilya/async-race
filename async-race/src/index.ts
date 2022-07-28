@@ -9,3 +9,4 @@ nav.createWinners();
 nav.clickBtn();
 const garage = new Garage();
 garage.createInput();
+garage.buildCarTable();

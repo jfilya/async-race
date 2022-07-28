@@ -30,6 +30,7 @@
       "import/no-unresolved": 0,
       "quotes": ["error", "double"],
       "@typescript-eslint/quotes": ["error", "double"],
+      "implicit-arrow-linebreak": ["error", "beside"],
       "prettier/prettier": [
           "error",
           {
