@@ -48,7 +48,8 @@ class Garage {
       const response = await fetch(`${this.garage}`);
       const content = await response.text();
       const cars = JSON.parse(content) as { [key: string]: string }[];
-
+      const sTitle = document.querySelector(".amountItems") as HTMLSpanElement;
+      sTitle.innerHTML = `(${cars.length})`;
       // eslint-disable-next-line no-restricted-syntax
       for (const car of cars) {
         this.renderCar(car.id, car.name, car.color);
