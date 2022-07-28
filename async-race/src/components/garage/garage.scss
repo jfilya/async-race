@@ -31,3 +31,29 @@
     width: 100%;
   }
 }
+.inputs {
+  margin-bottom: 50px;
+  max-width: 230px;
+}
+.road {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: calc(100% - 30px);
+  border-bottom: 1px dashed #fff;
+  padding: 0 15px;
+}
+.flag {
+  font-size: 60px;
+  padding-right: 150px;
+}
+.carsTable {
+  width: 100vw;
+}
+.launch {
+  width: inherit;
+}
+.btn,
+.icon {
+  background: #fff;
+}

@@ -48,13 +48,19 @@ class Navigation implements INav {
   createGarage(): void {
     this.main.append(this.garage);
     this.garage.id = "garage";
-    this.garage.innerHTML = "garage";
+    const inputs = document.createElement("div");
+    inputs.className = "inputs";
+    this.garage.append(inputs);
+    this.garage.innerHTML += "<h2>garage</h2>";
+    const cars = document.createElement("div");
+    cars.className = "carsTable";
+    this.garage.append(cars);
   }
 
   createWinners(): void {
     this.main.append(this.winners);
     this.winners.id = "winners";
-    this.winners.innerHTML = "winners";
+    this.winners.innerHTML = "<h2>winners</h2>";
   }
 
   clickBtn(): void {
