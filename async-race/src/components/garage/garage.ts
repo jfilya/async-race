@@ -39,7 +39,7 @@ class Garage {
     <div class="update">  
       <input type="text" id="name-select">
       <input type="color" id="color-select" value="#ffffff">
-      <input type="submit" value="update">
+      <input type="submit" value="update" id="update">
     </div>
     <div class="allBtn">  
       <input type="submit" value="race">
@@ -65,6 +65,7 @@ class Garage {
     });
     this.getArr();
     this.getDel();
+    this.getSellect();
   }
 
   createColorImg(color: string): string {
@@ -144,6 +145,56 @@ class Garage {
         const el = e.id.replace(/[^0-9]/g, "");
         await this.delete(el);
         await this.buildCarTable();
+      };
+    });
+  }
+
+  async updateCar(id: string): Promise<ICars> {
+    const response = await fetch(`${this.garage}/${id}`);
+    const content = await response.text();
+    const car = JSON.parse(content) as ICars;
+    return car;
+  }
+
+  async put(el: ICars): Promise<void> {
+    await fetch(`${this.garage}/${el.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+      body: JSON.stringify(el),
+    });
+  }
+
+  getSellect(): void {
+    const btnSelect = document.querySelectorAll(
+      // eslint-disable-next-line prettier/prettier
+      ".selectBtn",
+    ) as unknown as HTMLButtonElement[];
+    btnSelect.forEach((e) => {
+      e.onclick = async () => {
+        const id = e.id.replace(/[^0-9]/g, "");
+        const el = (await this.updateCar(id)) as unknown as ICars;
+        const selectName = document.querySelector(
+          // eslint-disable-next-line prettier/prettier
+          "#name-select",
+        ) as HTMLInputElement;
+        const selectColor = document.querySelector(
+          // eslint-disable-next-line prettier/prettier
+          "#color-select",
+        ) as HTMLInputElement;
+        selectName.value = el.name;
+        selectColor.value = el.color;
+        const update = document.getElementById("update") as HTMLInputElement;
+        update.onclick = () => {
+          el.name = selectName.value;
+          el.color = selectColor.value;
+          if (selectName.value !== "") {
+            this.put(el).finally(() => {});
+            this.buildCarTable().finally(() => {});
+            selectName.value = "";
+          }
+        };
       };
     });
   }
