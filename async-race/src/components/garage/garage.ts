@@ -63,6 +63,10 @@ class Garage {
     this.cars.forEach((car) => {
       this.renderCar(car);
     });
+    this.getCars();
+    this.deleteCar();
+    this.updateCar();
+    this.startDriving().finally(() => {});
   }
 
   createColorImg(color: string): string {
@@ -228,24 +232,28 @@ class Garage {
     startBtn.forEach((e) => {
       e.onclick = async () => {
         e.disabled = true;
-        const el = await this.getCar(e.id.replace(/[^0-9]/g, ""));
+        const id = e.id.replace(/[^0-9]/g, "");
+        const el = await this.getCar(id);
         const obj = (await this.startDrive(el).finally(
           // eslint-disable-next-line prettier/prettier
           () => {},
         )) as unknown as IEngine;
-        const time = +obj.distance / +obj.velocity;
-        console.log(obj, time);
+        const time = Math.floor(+obj.distance / +obj.velocity);
+        this.animationDrive(time, id).finally(() => {});
       };
     });
   }
 
-  async launchFunctions(): Promise<void> {
-    this.createInput();
-    await this.buildCarTable().finally(() => {});
-    this.getCars();
-    this.deleteCar();
-    this.updateCar();
-    await this.startDriving().finally(() => {});
+  async animationDrive(time: number, id: string): Promise<void> {
+    const element = document.getElementById(`car-${id}`) as HTMLDivElement;
+
+    function step() {
+      element.style.transform = "translateX(103%)";
+      element.style.transition = `${time}ms`;
+      window.requestAnimationFrame(step);
+    }
+
+    window.requestAnimationFrame(step);
   }
 }
 export default Garage;

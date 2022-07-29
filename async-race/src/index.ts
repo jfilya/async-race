@@ -8,4 +8,5 @@ nav.createGarage();
 nav.createWinners();
 nav.clickBtn();
 const garage = new Garage();
-garage.launchFunctions().finally(() => {});
+garage.createInput();
+garage.buildCarTable().finally(() => {});
