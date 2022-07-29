@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/comma-dangle */
 import { ICars, IEngine } from "../../types/interface";
 
 class Garage {
@@ -67,6 +68,7 @@ class Garage {
     this.deleteCar();
     this.updateCar();
     this.startDriving().finally(() => {});
+    this.removeDriving().finally(() => {});
   }
 
   createColorImg(color: string): string {
@@ -97,7 +99,7 @@ class Garage {
       <div class="launch">
         <div class="control">
           <button class="icon startIcon" id="start-${car.id}">A</button>
-          <button class="icon stopIcon" id="stop-${car.id}">B</button>
+          <button class="icon stopIcon" id="stop-${car.id}" disabled>B</button>
         </div>
         <div class="car" id="car-${car.id}">
           ${this.createColorImg(car.color)}
@@ -148,8 +150,7 @@ class Garage {
 
   deleteCar(): void {
     const btnRemoves = document.querySelectorAll(
-      // eslint-disable-next-line prettier/prettier
-      ".removeBtn",
+      ".removeBtn"
     ) as unknown as HTMLButtonElement[];
     btnRemoves.forEach((e) => {
       e.onclick = async () => {
@@ -179,30 +180,27 @@ class Garage {
 
   updateCar(): void {
     const btnSelect = document.querySelectorAll(
-      // eslint-disable-next-line prettier/prettier
-      ".selectBtn",
+      ".selectBtn"
     ) as unknown as HTMLButtonElement[];
     btnSelect.forEach((e) => {
       e.onclick = async () => {
         const id = e.id.replace(/[^0-9]/g, "");
         const el = (await this.getCar(id)) as unknown as ICars;
         const selectName = document.querySelector(
-          // eslint-disable-next-line prettier/prettier
-          "#name-select",
+          "#name-select"
         ) as HTMLInputElement;
         const selectColor = document.querySelector(
-          // eslint-disable-next-line prettier/prettier
-          "#color-select",
+          "#color-select"
         ) as HTMLInputElement;
         selectName.value = el.name;
         selectColor.value = el.color;
         const update = document.getElementById("update") as HTMLInputElement;
-        update.onclick = () => {
+        update.onclick = async () => {
           el.name = selectName.value;
           el.color = selectColor.value;
           if (selectName.value !== "") {
-            this.put(el).finally(() => {});
-            this.buildCarTable().finally(() => {});
+            await this.put(el).finally(() => {});
+            await this.buildCarTable().finally(() => {});
             selectName.value = "";
           }
         };
@@ -226,17 +224,19 @@ class Garage {
 
   async startDriving(): Promise<void> {
     const startBtn = document.querySelectorAll(
-      // eslint-disable-next-line @typescript-eslint/comma-dangle
       ".startIcon"
     ) as unknown as HTMLButtonElement[];
     startBtn.forEach((e) => {
       e.onclick = async () => {
         e.disabled = true;
         const id = e.id.replace(/[^0-9]/g, "");
+        const stopBtn = document.getElementById(
+          `stop-${id}`
+        ) as HTMLButtonElement;
+        stopBtn.disabled = false;
         const el = await this.getCar(id);
         const obj = (await this.startDrive(el).finally(
-          // eslint-disable-next-line prettier/prettier
-          () => {},
+          () => {}
         )) as unknown as IEngine;
         const time = Math.floor(+obj.distance / +obj.velocity);
         this.animationDrive(time, id).finally(() => {});
@@ -246,14 +246,30 @@ class Garage {
 
   async animationDrive(time: number, id: string): Promise<void> {
     const element = document.getElementById(`car-${id}`) as HTMLDivElement;
-
     function step() {
       element.style.transform = "translateX(103%)";
       element.style.transition = `${time}ms`;
-      window.requestAnimationFrame(step);
     }
-
     window.requestAnimationFrame(step);
+  }
+
+  async removeDriving(): Promise<void> {
+    const stopBtn = document.querySelectorAll(
+      ".stopIcon"
+    ) as unknown as HTMLButtonElement[];
+    stopBtn.forEach((e) => {
+      e.onclick = async () => {
+        e.disabled = false;
+        const id = e.id.replace(/[^0-9]/g, "");
+        const car = document.getElementById(`car-${id}`) as HTMLDivElement;
+        car.style.transform = "translateX(0%)";
+        car.style.transition = "0.1ms";
+        const startBtn = document.getElementById(
+          `start-${id}`
+        ) as HTMLButtonElement;
+        startBtn.disabled = false;
+      };
+    });
   }
 }
 export default Garage;
