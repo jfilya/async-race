@@ -63,8 +63,8 @@ class Garage {
     this.cars.forEach((car) => {
       this.renderCar(car);
     });
-    this.getArr();
-    this.getDel();
+    this.getCar();
+    this.deleteCar();
     this.getSellect();
   }
 
@@ -118,7 +118,7 @@ class Garage {
     });
   }
 
-  getArr(): void {
+  getCar(): void {
     (document.getElementById("create") as HTMLInputElement).onclick = () => {
       const createName = document.querySelector("#name") as HTMLInputElement;
       const createColor = document.querySelector("#color") as HTMLInputElement;
@@ -145,7 +145,7 @@ class Garage {
     });
   }
 
-  getDel(): void {
+  deleteCar(): void {
     const btnRemoves = document.querySelectorAll(
       // eslint-disable-next-line prettier/prettier
       ".removeBtn",
