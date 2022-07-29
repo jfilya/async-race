@@ -1,23 +1,13 @@
 /* eslint-disable @typescript-eslint/comma-dangle */
 import { ICars, IEngine } from "../../types/interface";
+import API from "../API";
 
-class Garage {
-  baseUrl: string;
-
-  garage: string;
-
-  engine: string;
-
-  winners: string;
-
-  cars: ICars[];
+class Garage extends API {
+  API: API;
 
   constructor() {
-    this.baseUrl = "http://127.0.0.1:3000";
-    this.garage = `${this.baseUrl}/garage`;
-    this.engine = `${this.baseUrl}/engine`;
-    this.winners = `${this.baseUrl}/winners`;
-    this.cars = [];
+    super();
+    this.API = new API();
   }
 
   clickBtnGarage(): void {
@@ -47,12 +37,6 @@ class Garage {
       <input type="submit" value="reset">
       <input type="submit" value="generate cars">
   </div>`;
-  }
-
-  async get(): Promise<void> {
-    const response = await fetch(`${this.garage}`);
-    const content = await response.text();
-    this.cars = JSON.parse(content) as ICars[];
   }
 
   async buildCarTable(): Promise<void> {
@@ -111,16 +95,6 @@ class Garage {
     `;
   }
 
-  async post(el: ICars): Promise<void> {
-    await fetch(`${this.garage}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json;charset=utf-8",
-      },
-      body: JSON.stringify(el),
-    });
-  }
-
   getCars(): void {
     (document.getElementById("create") as HTMLInputElement).onclick = () => {
       const createName = document.querySelector("#name") as HTMLInputElement;
@@ -142,12 +116,6 @@ class Garage {
     };
   }
 
-  async delete(id: string): Promise<void> {
-    await fetch(`${this.garage}/${id}`, {
-      method: "DELETE",
-    });
-  }
-
   deleteCar(): void {
     const btnRemoves = document.querySelectorAll(
       ".removeBtn"
@@ -158,23 +126,6 @@ class Garage {
         await this.delete(el);
         await this.buildCarTable();
       };
-    });
-  }
-
-  async getCar(id: string): Promise<ICars> {
-    const response = await fetch(`${this.garage}/${id}`);
-    const content = await response.text();
-    const car = JSON.parse(content) as ICars;
-    return car;
-  }
-
-  async put(el: ICars): Promise<void> {
-    await fetch(`${this.garage}/${el.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json;charset=utf-8",
-      },
-      body: JSON.stringify(el),
     });
   }
 
@@ -206,20 +157,6 @@ class Garage {
         };
       };
     });
-  }
-
-  async startDrive(el: ICars): Promise<IEngine> {
-    const response = (
-      await fetch(`${this.engine}?id=${el.id}&status=started`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json;charset=utf-8",
-        },
-        body: JSON.stringify(el),
-      })
-    ).text();
-    const content = JSON.parse(await response) as Promise<string>;
-    return content as unknown as IEngine;
   }
 
   async startDriving(): Promise<void> {
