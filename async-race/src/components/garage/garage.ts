@@ -196,7 +196,7 @@ class Garage extends API {
     ) as unknown as HTMLButtonElement[];
     stopBtn.forEach((e) => {
       e.onclick = async () => {
-        e.disabled = false;
+        e.disabled = true;
         const id = e.id.replace(/[^0-9]/g, "");
         const car = document.getElementById(`car-${id}`) as HTMLDivElement;
         car.style.transform = "translateX(0%)";
