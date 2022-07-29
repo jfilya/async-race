@@ -12,4 +12,9 @@ interface ICars {
   color: string;
   id: string;
 }
-export { INav, ICars };
+
+interface IEngine {
+  velocity: string;
+  distance: string;
+}
+export { INav, ICars, IEngine };

@@ -1,4 +1,4 @@
-import { ICars } from "../../types/interface";
+import { ICars, IEngine } from "../../types/interface";
 
 class Garage {
   baseUrl: string;
@@ -63,9 +63,6 @@ class Garage {
     this.cars.forEach((car) => {
       this.renderCar(car);
     });
-    this.getCar();
-    this.deleteCar();
-    this.getSellect();
   }
 
   createColorImg(color: string): string {
@@ -118,7 +115,7 @@ class Garage {
     });
   }
 
-  getCar(): void {
+  getCars(): void {
     (document.getElementById("create") as HTMLInputElement).onclick = () => {
       const createName = document.querySelector("#name") as HTMLInputElement;
       const createColor = document.querySelector("#color") as HTMLInputElement;
@@ -159,7 +156,7 @@ class Garage {
     });
   }
 
-  async updateCar(id: string): Promise<ICars> {
+  async getCar(id: string): Promise<ICars> {
     const response = await fetch(`${this.garage}/${id}`);
     const content = await response.text();
     const car = JSON.parse(content) as ICars;
@@ -176,7 +173,7 @@ class Garage {
     });
   }
 
-  getSellect(): void {
+  updateCar(): void {
     const btnSelect = document.querySelectorAll(
       // eslint-disable-next-line prettier/prettier
       ".selectBtn",
@@ -184,7 +181,7 @@ class Garage {
     btnSelect.forEach((e) => {
       e.onclick = async () => {
         const id = e.id.replace(/[^0-9]/g, "");
-        const el = (await this.updateCar(id)) as unknown as ICars;
+        const el = (await this.getCar(id)) as unknown as ICars;
         const selectName = document.querySelector(
           // eslint-disable-next-line prettier/prettier
           "#name-select",
@@ -207,6 +204,48 @@ class Garage {
         };
       };
     });
+  }
+
+  async startDrive(el: ICars): Promise<IEngine> {
+    const response = (
+      await fetch(`${this.engine}?id=${el.id}&status=started`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify(el),
+      })
+    ).text();
+    const content = JSON.parse(await response) as Promise<string>;
+    return content as unknown as IEngine;
+  }
+
+  async startDriving(): Promise<void> {
+    const startBtn = document.querySelectorAll(
+      // eslint-disable-next-line @typescript-eslint/comma-dangle
+      ".startIcon"
+    ) as unknown as HTMLButtonElement[];
+    startBtn.forEach((e) => {
+      e.onclick = async () => {
+        e.disabled = true;
+        const el = await this.getCar(e.id.replace(/[^0-9]/g, ""));
+        const obj = (await this.startDrive(el).finally(
+          // eslint-disable-next-line prettier/prettier
+          () => {},
+        )) as unknown as IEngine;
+        const time = +obj.distance / +obj.velocity;
+        console.log(obj, time);
+      };
+    });
+  }
+
+  async launchFunctions(): Promise<void> {
+    this.createInput();
+    await this.buildCarTable().finally(() => {});
+    this.getCars();
+    this.deleteCar();
+    this.updateCar();
+    await this.startDriving().finally(() => {});
   }
 }
 export default Garage;
