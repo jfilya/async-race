@@ -46,22 +46,23 @@ class Garage {
   </div>`;
   }
 
-  buildCarTable(): void {
-    const get = async () => {
-      const response = await fetch(`${this.garage}`);
-      const content = await response.text();
-      this.cars = JSON.parse(content) as { [key: string]: string }[];
-      const sTitle = document.querySelector(".amountItems") as HTMLSpanElement;
-      sTitle.innerHTML = `(${this.cars.length})`;
-      const cars = document.querySelector(".carsTable") as HTMLDivElement;
-      cars.innerHTML = "";
-      // eslint-disable-next-line no-restricted-syntax
-      for (const car of this.cars) {
-        this.renderCar(car.id, car.name, car.color);
-      }
-    };
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    get();
+  async get(): Promise<void> {
+    const response = await fetch(`${this.garage}`);
+    const content = await response.text();
+    this.cars = JSON.parse(content) as { [key: string]: string }[];
+  }
+
+  async buildCarTable(): Promise<void> {
+    await this.get();
+    const sTitle = document.querySelector(".amountItems") as HTMLSpanElement;
+    sTitle.innerHTML = `(${this.cars.length})`;
+    const cars = document.querySelector(".carsTable") as HTMLDivElement;
+    cars.innerHTML = "";
+    this.cars.forEach((car) => {
+      this.renderCar(car.id, car.name, car.color);
+    });
+    this.getArr();
+    this.getDel();
   }
 
   createColorImg(color: string): string {
@@ -74,27 +75,27 @@ class Garage {
     const cars = document.querySelector(".carsTable") as HTMLDivElement;
     cars.innerHTML += `<div class="carItem">
     <div class="generalBtn">
-      <button class="btn selectBtn" id="${id}Select">Select</button>
-      <button class="btn removeBtn" id="${id}Remove">Remove</button>
+      <button class="btn selectBtn" id="select-${id}">Select</button>
+      <button class="btn removeBtn" id="remove-${id}">Remove</button>
       <span class="carName">${name}</span>
     </div>
     <div class="road">
       <div class="launch">
         <div class="control">
-          <button class="icon startIcon" id="${id}Start">A</button>
-          <button class="icon stopIcon" id="${id}Stop">B</button>
+          <button class="icon startIcon" id="start-${id}">A</button>
+          <button class="icon stopIcon" id="stop-${id}">B</button>
         </div>
-        <div class="car" id="${id}-car">
+        <div class="car" id="car-${id}">
           ${this.createColorImg(color)}
         </div> 
       </div>
-      <div class="flag" id="${id}flag">🏲</div>
+      <div class="flag" id="flag${id}">🏲</div>
     </div>
     </div>         
     `;
   }
 
-  post = async (el: { name: string; color: string }) => {
+  async post(el: { name: string; color: string }): Promise<void> {
     await fetch(`${this.garage}`, {
       method: "POST",
       headers: {
@@ -102,9 +103,10 @@ class Garage {
       },
       body: JSON.stringify(el),
     });
-  };
+  }
 
-  getArr() {
+  getArr(): void {
+    console.log(document.getElementById("create") as HTMLInputElement);
     (document.getElementById("create") as HTMLInputElement).onclick = () => {
       const createName = document.querySelector("#name") as HTMLInputElement;
       const createColor = document.querySelector("#color") as HTMLInputElement;
@@ -115,10 +117,29 @@ class Garage {
       obj.name = createName.value;
       obj.color = createColor.value;
 
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      this.post(obj);
-      this.buildCarTable();
+      this.post(obj).finally(() => {});
+      this.buildCarTable().finally(() => {});
     };
+  }
+
+  async delete(id: string): Promise<void> {
+    await fetch(`${this.garage}/${id}`, {
+      method: "DELETE",
+    });
+  }
+
+  getDel(): void {
+    const btnRemoves = document.querySelectorAll(
+      // eslint-disable-next-line prettier/prettier
+      ".removeBtn",
+    ) as unknown as HTMLButtonElement[];
+    btnRemoves.forEach((e) => {
+      e.onclick = async () => {
+        const el = e.id.replace(/[^0-9]/g, "");
+        await this.delete(el);
+        await this.buildCarTable();
+      };
+    });
   }
 }
 export default Garage;
