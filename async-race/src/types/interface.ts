@@ -7,4 +7,9 @@ interface INav {
   nav: HTMLElement;
   main: HTMLElement;
 }
-export default INav;
+interface ICars {
+  name: string;
+  color: string;
+  id: string;
+}
+export { INav, ICars };

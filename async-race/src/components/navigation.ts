@@ -1,4 +1,4 @@
-import INav from "../types/interface";
+import { INav } from "../types/interface";
 import Garage from "./garage/garage";
 import Winners from "./winners/winners";
 

@@ -1,3 +1,5 @@
+import { ICars } from "../../types/interface";
+
 class Garage {
   baseUrl: string;
 
@@ -7,7 +9,7 @@ class Garage {
 
   winners: string;
 
-  cars: { [key: string]: string }[];
+  cars: ICars[];
 
   constructor() {
     this.baseUrl = "http://127.0.0.1:3000";
@@ -35,8 +37,8 @@ class Garage {
       <input type="submit" value="create" id="create">
     </div>
     <div class="update">  
-      <input type="text" id="name">
-      <input type="color" id="color" value="#ffffff">
+      <input type="text" id="name-select">
+      <input type="color" id="color-select" value="#ffffff">
       <input type="submit" value="update">
     </div>
     <div class="allBtn">  
@@ -49,7 +51,7 @@ class Garage {
   async get(): Promise<void> {
     const response = await fetch(`${this.garage}`);
     const content = await response.text();
-    this.cars = JSON.parse(content) as { [key: string]: string }[];
+    this.cars = JSON.parse(content) as ICars[];
   }
 
   async buildCarTable(): Promise<void> {
@@ -59,7 +61,7 @@ class Garage {
     const cars = document.querySelector(".carsTable") as HTMLDivElement;
     cars.innerHTML = "";
     this.cars.forEach((car) => {
-      this.renderCar(car.id, car.name, car.color);
+      this.renderCar(car);
     });
     this.getArr();
     this.getDel();
@@ -71,31 +73,31 @@ class Garage {
     </svg>`;
   }
 
-  renderCar(id: string, name: string, color: string): void {
+  renderCar(car: ICars): void {
     const cars = document.querySelector(".carsTable") as HTMLDivElement;
     cars.innerHTML += `<div class="carItem">
     <div class="generalBtn">
-      <button class="btn selectBtn" id="select-${id}">Select</button>
-      <button class="btn removeBtn" id="remove-${id}">Remove</button>
-      <span class="carName">${name}</span>
+      <button class="btn selectBtn" id="select-${car.id}">Select</button>
+      <button class="btn removeBtn" id="remove-${car.id}">Remove</button>
+      <span class="carName">${car.name}</span>
     </div>
     <div class="road">
       <div class="launch">
         <div class="control">
-          <button class="icon startIcon" id="start-${id}">A</button>
-          <button class="icon stopIcon" id="stop-${id}">B</button>
+          <button class="icon startIcon" id="start-${car.id}">A</button>
+          <button class="icon stopIcon" id="stop-${car.id}">B</button>
         </div>
-        <div class="car" id="car-${id}">
-          ${this.createColorImg(color)}
+        <div class="car" id="car-${car.id}">
+          ${this.createColorImg(car.color)}
         </div> 
       </div>
-      <div class="flag" id="flag${id}">🏲</div>
+      <div class="flag" id="flag${car.id}">🏲</div>
     </div>
     </div>         
     `;
   }
 
-  async post(el: { name: string; color: string }): Promise<void> {
+  async post(el: ICars): Promise<void> {
     await fetch(`${this.garage}`, {
       method: "POST",
       headers: {
@@ -106,13 +108,13 @@ class Garage {
   }
 
   getArr(): void {
-    console.log(document.getElementById("create") as HTMLInputElement);
     (document.getElementById("create") as HTMLInputElement).onclick = () => {
       const createName = document.querySelector("#name") as HTMLInputElement;
       const createColor = document.querySelector("#color") as HTMLInputElement;
-      const obj: { name: string; color: string } = {
+      const obj: ICars = {
         name: "",
         color: "",
+        id: "",
       };
       if (createName.value !== "") {
         obj.name = createName.value;
