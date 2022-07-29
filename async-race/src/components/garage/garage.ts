@@ -114,11 +114,15 @@ class Garage {
         name: "",
         color: "",
       };
-      obj.name = createName.value;
-      obj.color = createColor.value;
+      if (createName.value !== "") {
+        obj.name = createName.value;
+        obj.color = createColor.value;
 
-      this.post(obj).finally(() => {});
-      this.buildCarTable().finally(() => {});
+        this.post(obj).finally(() => {});
+        this.buildCarTable().finally(() => {});
+
+        createName.value = "";
+      }
     };
   }
 
