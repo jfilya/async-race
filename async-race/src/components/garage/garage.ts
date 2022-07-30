@@ -29,7 +29,7 @@ class Garage extends API {
     this.getCars();
     this.deleteCar();
     this.updateCar();
-    this.startDriving().finally(() => {});
+    this.startDrivingOneCar().finally(() => {});
     this.removeDriving().finally(() => {});
   }
 
@@ -97,7 +97,16 @@ class Garage extends API {
     });
   }
 
-  async startDriving(): Promise<void> {
+  async startDriving(id: string): Promise<void> {
+    const el = await this.getCar(id);
+    const obj = (await this.startDrive(el).finally(
+      () => {}
+    )) as unknown as IEngine;
+    const time = Math.floor(+obj.distance / +obj.velocity);
+    this.animationDrive(time, id).finally(() => {});
+  }
+
+  async startDrivingOneCar(): Promise<void> {
     const startBtn = document.querySelectorAll(
       ".startIcon"
     ) as unknown as HTMLButtonElement[];
@@ -109,12 +118,7 @@ class Garage extends API {
           `stop-${id}`
         ) as HTMLButtonElement;
         stopBtn.disabled = false;
-        const el = await this.getCar(id);
-        const obj = (await this.startDrive(el).finally(
-          () => {}
-        )) as unknown as IEngine;
-        const time = Math.floor(+obj.distance / +obj.velocity);
-        this.animationDrive(time, id).finally(() => {});
+        this.startDriving(id).finally(() => {});
       };
     });
   }
@@ -207,6 +211,33 @@ class Garage extends API {
       await this.showPage(list[this.pageNumber]).finally(() => {});
     };
     this.showPage(list[this.pageNumber]).finally(() => {});
+  }
+
+  async race(): Promise<void> {
+    await this.get();
+    await this.pagination();
+    const raceBtn = document.getElementById("race") as HTMLInputElement;
+    const carsOnPage = document.querySelectorAll(
+      ".car"
+    ) as unknown as HTMLDivElement[];
+    raceBtn.onclick = async () => {
+      const startBtn = document.querySelectorAll(
+        ".startIcon"
+      ) as unknown as HTMLButtonElement[];
+      const stopBtn = document.querySelectorAll(
+        ".stopIcon"
+      ) as unknown as HTMLButtonElement[];
+      startBtn.forEach((e) => {
+        e.disabled = true;
+      });
+      stopBtn.forEach((e) => {
+        e.disabled = false;
+      });
+      carsOnPage.forEach((e) => {
+        const id = e.id.replace(/[^0-9]/g, "");
+        this.startDriving(id).finally(() => {});
+      });
+    };
   }
 }
 export default Garage;

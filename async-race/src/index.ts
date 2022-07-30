@@ -10,3 +10,4 @@ interfaceUser.clickBtn();
 interfaceUser.createInput();
 const garage = new Garage();
 garage.pagination().finally(() => {});
+garage.race().finally(() => {});
