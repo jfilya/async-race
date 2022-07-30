@@ -51,7 +51,13 @@ class Navigation implements INav {
     const inputs = document.createElement("div");
     inputs.className = "inputs";
     this.garage.append(inputs);
-    this.garage.innerHTML += "<h2>garage <span class='amountItems'><span></h2>";
+    this.garage.innerHTML += `<h2>garage <span class='amountItems'><span></h2>
+    <div class="listPagination">
+      Page № 
+      <ul class="pagination"></ul>
+    </div>
+    <br>
+    `;
     const cars = document.createElement("div");
     cars.className = "carsTable";
     this.garage.append(cars);

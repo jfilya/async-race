@@ -13,3 +13,13 @@
   margin: 5px;
   font-size: 20px;
 }
+.listPagination{
+  display: flex;
+  align-items: center;
+}
+.active{
+  display: block;
+}
+li {
+  display: none;
+}

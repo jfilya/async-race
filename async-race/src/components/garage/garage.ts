@@ -5,9 +5,15 @@ import API from "../API";
 class Garage extends API {
   API: API;
 
+  notes: Array<ICars>;
+
+  pageNumber: number;
+
   constructor() {
     super();
     this.API = new API();
+    this.notes = [];
+    this.pageNumber = 0;
   }
 
   clickBtnGarage(): void {
@@ -39,13 +45,13 @@ class Garage extends API {
   </div>`;
   }
 
-  async buildCarTable(): Promise<void> {
+  async buildCarTable(array: ICars[]): Promise<void> {
     await this.get();
     const sTitle = document.querySelector(".amountItems") as HTMLSpanElement;
     sTitle.innerHTML = `(${this.cars.length})`;
     const cars = document.querySelector(".carsTable") as HTMLDivElement;
     cars.innerHTML = "";
-    this.cars.forEach((car) => {
+    array.forEach((car) => {
       this.renderCar(car);
     });
     this.getCars();
@@ -109,7 +115,7 @@ class Garage extends API {
         obj.color = createColor.value;
 
         this.post(obj).finally(() => {});
-        this.buildCarTable().finally(() => {});
+        this.pagination().finally(() => {});
 
         createName.value = "";
       }
@@ -124,7 +130,7 @@ class Garage extends API {
       e.onclick = async () => {
         const el = e.id.replace(/[^0-9]/g, "");
         await this.delete(el);
-        await this.buildCarTable();
+        await this.pagination();
       };
     });
   }
@@ -151,7 +157,7 @@ class Garage extends API {
           el.color = selectColor.value;
           if (selectName.value !== "") {
             await this.put(el).finally(() => {});
-            await this.buildCarTable().finally(() => {});
+            await this.pagination().finally(() => {});
             selectName.value = "";
           }
         };
@@ -207,6 +213,61 @@ class Garage extends API {
         startBtn.disabled = false;
       };
     });
+  }
+
+  async pagination(): Promise<void> {
+    await this.get();
+    const arrowLeft = document.querySelector(
+      "#pagination-prev"
+    ) as HTMLButtonElement;
+    const arrowRight = document.querySelector(
+      "#pagination-next"
+    ) as HTMLButtonElement;
+
+    const notesOnPage = 7 as number;
+    const countOfItem: number = Math.ceil(this.cars.length / notesOnPage);
+    const pagination = document.querySelector(
+      ".pagination"
+    ) as HTMLUListElement;
+    pagination.innerHTML = "";
+    for (let i = 1; i <= countOfItem; i += 1) {
+      const li = document.createElement("li") as HTMLElement;
+      li.innerText = String(i);
+      pagination.append(li);
+    }
+    const list = document.querySelectorAll(".pagination li");
+    const showPage = async (li: Element): Promise<void> => {
+      const active = document.querySelector(
+        ".pagination li.active"
+      ) as HTMLLIElement;
+      if (active) {
+        active.classList.remove("active");
+      }
+      li.classList.add("active");
+      const start = (+li.innerHTML - 1) * notesOnPage;
+      const end = (+li.innerHTML - 1) * notesOnPage + notesOnPage;
+
+      this.notes = this.cars.slice(start, end);
+      await this.buildCarTable(this.notes).finally(() => {});
+    };
+    arrowRight.addEventListener("click", (): void => {
+      this.pageNumber += 1;
+      if (this.pageNumber > countOfItem - 1) {
+        this.pageNumber = countOfItem - 1;
+      }
+      showPage(list[this.pageNumber]).finally(() => {});
+    });
+    arrowLeft.addEventListener("click", (): void => {
+      this.pageNumber -= 1;
+      if (this.pageNumber < 0) {
+        this.pageNumber = 0;
+      }
+      showPage(list[this.pageNumber]).finally(() => {});
+    });
+    if (!list[this.pageNumber]) {
+      this.pageNumber -= 1;
+    }
+    showPage(list[this.pageNumber]).finally(() => {});
   }
 }
 export default Garage;
