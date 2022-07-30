@@ -215,59 +215,71 @@ class Garage extends API {
     });
   }
 
+  async paginationNumberPage(count: number): Promise<void> {
+    const pagination = document.querySelector(
+      ".pagination"
+    ) as HTMLUListElement;
+    let paginationNumberOfPage = "";
+    for (let i = 1; i <= count; i += 1) {
+      paginationNumberOfPage += `<li>${i}</li>`;
+    }
+    pagination.innerHTML = paginationNumberOfPage;
+  }
+
+  async showPage(li: Element): Promise<void> {
+    const active = document.querySelector(
+      ".pagination li.active"
+    ) as HTMLLIElement;
+    if (active) {
+      active.classList.remove("active");
+    }
+    li.classList.add("active");
+    const start = (Number(li.innerHTML) - 1) * 7;
+    const end = (Number(li.innerHTML) - 1) * 7 + 7;
+    this.notes = this.cars.slice(start, end);
+    await this.buildCarTable(this.notes).finally(() => {});
+  }
+
   async pagination(): Promise<void> {
     await this.get();
+    const countOfItem: number = Math.ceil(this.cars.length / 7);
+    await this.paginationNumberPage(countOfItem);
+    const list = document.querySelectorAll(".pagination li");
     const arrowLeft = document.querySelector(
       "#pagination-prev"
     ) as HTMLButtonElement;
     const arrowRight = document.querySelector(
       "#pagination-next"
     ) as HTMLButtonElement;
-
-    const notesOnPage = 7 as number;
-    const countOfItem: number = Math.ceil(this.cars.length / notesOnPage);
-    const pagination = document.querySelector(
-      ".pagination"
-    ) as HTMLUListElement;
-    pagination.innerHTML = "";
-    for (let i = 1; i <= countOfItem; i += 1) {
-      const li = document.createElement("li") as HTMLElement;
-      li.innerText = String(i);
-      pagination.append(li);
-    }
-    const list = document.querySelectorAll(".pagination li");
-    const showPage = async (li: Element): Promise<void> => {
-      const active = document.querySelector(
-        ".pagination li.active"
-      ) as HTMLLIElement;
-      if (active) {
-        active.classList.remove("active");
+    const disableBtn = () => {
+      if (this.pageNumber === countOfItem - 1) {
+        arrowRight.disabled = true;
       }
-      li.classList.add("active");
-      const start = (+li.innerHTML - 1) * notesOnPage;
-      const end = (+li.innerHTML - 1) * notesOnPage + notesOnPage;
-
-      this.notes = this.cars.slice(start, end);
-      await this.buildCarTable(this.notes).finally(() => {});
+      if (this.pageNumber < countOfItem - 1) {
+        arrowRight.disabled = false;
+      }
+      if (this.pageNumber === 0) {
+        arrowLeft.disabled = true;
+      }
+      if (this.pageNumber > 0) {
+        arrowLeft.disabled = false;
+      }
     };
-    arrowRight.addEventListener("click", (): void => {
+    disableBtn();
+    arrowRight.onclick = async () => {
       this.pageNumber += 1;
-      if (this.pageNumber > countOfItem - 1) {
-        this.pageNumber = countOfItem - 1;
-      }
-      showPage(list[this.pageNumber]).finally(() => {});
-    });
-    arrowLeft.addEventListener("click", (): void => {
+      disableBtn();
+      await this.showPage(list[this.pageNumber]).finally(() => {});
+    };
+    arrowLeft.onclick = async () => {
       this.pageNumber -= 1;
-      if (this.pageNumber < 0) {
-        this.pageNumber = 0;
-      }
-      showPage(list[this.pageNumber]).finally(() => {});
-    });
+      disableBtn();
+      await this.showPage(list[this.pageNumber]).finally(() => {});
+    };
     if (!list[this.pageNumber]) {
       this.pageNumber -= 1;
     }
-    showPage(list[this.pageNumber]).finally(() => {});
+    this.showPage(list[this.pageNumber]).finally(() => {});
   }
 }
 export default Garage;
