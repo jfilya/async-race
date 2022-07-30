@@ -1,12 +1,12 @@
 import "./global.scss";
-import Navigation from "./components/navigation";
+import UserInterface from "./components/user-interface";
 import Garage from "./components/garage/garage";
 
-const nav = new Navigation();
-nav.createNav();
-nav.createGarage();
-nav.createWinners();
-nav.clickBtn();
+const interfaceUser = new UserInterface();
+interfaceUser.createNav();
+interfaceUser.createGarage();
+interfaceUser.createWinners();
+interfaceUser.clickBtn();
+interfaceUser.createInput();
 const garage = new Garage();
-garage.createInput();
 garage.pagination().finally(() => {});
