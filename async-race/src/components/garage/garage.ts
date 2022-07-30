@@ -30,7 +30,9 @@ class Garage extends API {
     this.deleteCar();
     this.updateCar();
     this.startDrivingOneCar().finally(() => {});
-    this.removeDriving().finally(() => {});
+    this.removeDrivingOneCar().finally(() => {});
+    this.race().finally(() => {});
+    this.resetRace().finally(() => {});
   }
 
   getCars(): void {
@@ -132,7 +134,16 @@ class Garage extends API {
     window.requestAnimationFrame(step);
   }
 
-  async removeDriving(): Promise<void> {
+  async removeDriving(id: string): Promise<void> {
+    const el = await this.getCar(id);
+    await this.stopDrive(el).finally(() => {});
+    const car = document.getElementById(`car-${id}`) as HTMLDivElement;
+    car.style.transform = "translateX(0%)";
+    car.style.transition = "0.1ms";
+    window.cancelAnimationFrame(Number(id));
+  }
+
+  async removeDrivingOneCar(): Promise<void> {
     const stopBtn = document.querySelectorAll(
       ".stopIcon"
     ) as unknown as HTMLButtonElement[];
@@ -144,12 +155,7 @@ class Garage extends API {
           `start-${id}`
         ) as HTMLButtonElement;
         startBtn.disabled = false;
-        const el = await this.getCar(id);
-        await this.stopDrive(el).finally(() => {});
-        const car = document.getElementById(`car-${id}`) as HTMLDivElement;
-        car.style.transform = "translateX(0%)";
-        car.style.transition = "0.1ms";
-        window.cancelAnimationFrame(Number(id));
+        await this.removeDriving(id);
       };
     });
   }
@@ -214,8 +220,6 @@ class Garage extends API {
   }
 
   async race(): Promise<void> {
-    await this.get();
-    await this.pagination();
     const raceBtn = document.getElementById("race") as HTMLInputElement;
     const carsOnPage = document.querySelectorAll(
       ".car"
@@ -236,6 +240,31 @@ class Garage extends API {
       carsOnPage.forEach((e) => {
         const id = e.id.replace(/[^0-9]/g, "");
         this.startDriving(id).finally(() => {});
+      });
+    };
+  }
+
+  async resetRace(): Promise<void> {
+    const resetRaceBtn = document.getElementById("reset") as HTMLInputElement;
+    const carsOnPage = document.querySelectorAll(
+      ".car"
+    ) as unknown as HTMLDivElement[];
+    resetRaceBtn.onclick = async () => {
+      const startBtn = document.querySelectorAll(
+        ".startIcon"
+      ) as unknown as HTMLButtonElement[];
+      const stopBtn = document.querySelectorAll(
+        ".stopIcon"
+      ) as unknown as HTMLButtonElement[];
+      startBtn.forEach((e) => {
+        e.disabled = false;
+      });
+      stopBtn.forEach((e) => {
+        e.disabled = true;
+      });
+      carsOnPage.forEach((e) => {
+        const id = e.id.replace(/[^0-9]/g, "");
+        this.removeDriving(id).finally(() => {});
       });
     };
   }
