@@ -35,6 +35,10 @@ button{
     outline:none;
     background: transparent;
     border:none;
+    transition: 0.5s;
+    &:active{
+        transform: scale(0.8);
+    }
 }
 main{
     position: relative;
@@ -43,9 +47,4 @@ main{
 h2{
     text-transform: uppercase;
     margin-bottom: 20px;
-}
-.btnPagination{
-    background: blueviolet;
-    padding: 5px 15px;
-    margin: 5px;
 }
