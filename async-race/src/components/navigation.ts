@@ -55,6 +55,12 @@ class Navigation implements INav {
     const cars = document.createElement("div");
     cars.className = "carsTable";
     this.garage.append(cars);
+    const buttonPrevNext = `<div class="buttonPrevNext">
+      <button class="btnPagination" id="pagination-prev">Prev</button>
+      <button class="btnPagination" id="pagination-next">Next</button>
+    </div>
+    `;
+    this.garage.innerHTML += buttonPrevNext;
   }
 
   createWinners(): void {
