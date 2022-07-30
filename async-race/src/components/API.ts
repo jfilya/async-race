@@ -71,5 +71,19 @@ class API {
     const content = JSON.parse(await response) as Promise<string>;
     return content as unknown as IEngine;
   }
+
+  async stopDrive(el: ICars): Promise<IEngine> {
+    const response = (
+      await fetch(`${this.engine}?id=${el.id}&status=stopped`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json;charset=utf-8",
+        },
+        body: JSON.stringify(el),
+      })
+    ).text();
+    const content = JSON.parse(await response) as Promise<string>;
+    return content as unknown as IEngine;
+  }
 }
 export default API;

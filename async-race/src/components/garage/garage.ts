@@ -136,13 +136,16 @@ class Garage extends API {
       e.onclick = async () => {
         e.disabled = true;
         const id = e.id.replace(/[^0-9]/g, "");
-        const car = document.getElementById(`car-${id}`) as HTMLDivElement;
-        car.style.transform = "translateX(0%)";
-        car.style.transition = "0.1ms";
         const startBtn = document.getElementById(
           `start-${id}`
         ) as HTMLButtonElement;
         startBtn.disabled = false;
+        const el = await this.getCar(id);
+        await this.stopDrive(el).finally(() => {});
+        const car = document.getElementById(`car-${id}`) as HTMLDivElement;
+        car.style.transform = "translateX(0%)";
+        car.style.transition = "0.1ms";
+        window.cancelAnimationFrame(Number(id));
       };
     });
   }
@@ -184,18 +187,10 @@ class Garage extends API {
       "#pagination-next"
     ) as HTMLButtonElement;
     const disableBtn = () => {
-      if (this.pageNumber === countOfItem - 1) {
-        arrowRight.disabled = true;
-      }
-      if (this.pageNumber < countOfItem - 1) {
-        arrowRight.disabled = false;
-      }
-      if (this.pageNumber === 0) {
-        arrowLeft.disabled = true;
-      }
-      if (this.pageNumber > 0) {
-        arrowLeft.disabled = false;
-      }
+      if (this.pageNumber === countOfItem - 1) arrowRight.disabled = true;
+      if (this.pageNumber < countOfItem - 1) arrowRight.disabled = false;
+      if (this.pageNumber === 0) arrowLeft.disabled = true;
+      if (this.pageNumber > 0) arrowLeft.disabled = false;
     };
     if (!list[this.pageNumber]) {
       this.pageNumber -= 1;
