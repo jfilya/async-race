@@ -1,5 +1,4 @@
 import { ICars, INav } from "../types/interface";
-import Winners from "./winners/winners";
 
 class UserInterface implements INav {
   garage: HTMLElement;
@@ -14,8 +13,6 @@ class UserInterface implements INav {
 
   nav: HTMLElement;
 
-  win: Winners;
-
   main: HTMLElement;
 
   constructor() {
@@ -26,7 +23,6 @@ class UserInterface implements INav {
     this.btnGarage = document.createElement("button");
     this.nav = document.createElement("nav");
     this.main = document.createElement("main");
-    this.win = new Winners();
   }
 
   createNav(): void {
@@ -98,7 +94,11 @@ class UserInterface implements INav {
       garage.classList.remove("notActive");
       winners.classList.remove("active");
     };
-    this.win.clickBtnWinners();
+    const btnWin = document.querySelector(".btnWinners") as HTMLButtonElement;
+    btnWin.onclick = () => {
+      garage.classList.add("notActive");
+      winners.classList.add("active");
+    };
   }
 
   createColorImg(color: string): string {
@@ -139,6 +139,11 @@ class UserInterface implements INav {
     </div>
     </div>         
     `;
+  }
+
+  showWinner(): void {
+    this.garage.innerHTML += `
+    <p class="showWinner"><p>`;
   }
 }
 

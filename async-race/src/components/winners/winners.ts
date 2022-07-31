@@ -1,17 +1,21 @@
 /* eslint-disable @typescript-eslint/comma-dangle */
-class Winners {
-  // constructor() {}
+import { IWinner } from "../../types/interface";
+import API from "../API";
+import Garage from "../garage/garage";
 
-  clickBtnWinners(): void {
-    const btnWinners = document.querySelector(
-      ".btnWinners"
-    ) as HTMLButtonElement;
-    const garage = document.querySelector("#garage") as HTMLElement;
-    const winners = document.querySelector("#winners") as HTMLElement;
-    btnWinners.onclick = () => {
-      garage.classList.add("notActive");
-      winners.classList.add("active");
-    };
+class Winners extends API {
+  gar: Garage;
+
+  constructor() {
+    super();
+    this.gar = new Garage();
+  }
+
+  async winnerCar(): Promise<void> {
+    const win = (await this.getWinner().finally(
+      () => {}
+    )) as unknown as IWinner[];
+    console.log(win[win.length - 1]);
   }
 }
 

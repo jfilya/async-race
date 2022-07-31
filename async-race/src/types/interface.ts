@@ -1,4 +1,4 @@
-interface INav {
+export interface INav {
   garage: HTMLElement;
   winners: HTMLElement;
   body: HTMLElement;
@@ -7,14 +7,19 @@ interface INav {
   nav: HTMLElement;
   main: HTMLElement;
 }
-interface ICars {
+export interface ICars {
   name: string;
   color: string;
   id: string;
 }
 
-interface IEngine {
+export interface IEngine {
   velocity: string;
   distance: string;
 }
-export { INav, ICars, IEngine };
+
+export interface IWinner {
+  id: string;
+  wins: number;
+  time: number;
+}

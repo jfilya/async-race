@@ -4,8 +4,6 @@ import API from "../API";
 import UserInterface from "../user-interface";
 
 class Garage extends API {
-  notes: Array<ICars>;
-
   pageNumber: number;
 
   interfaceUser: UserInterface;
@@ -13,7 +11,6 @@ class Garage extends API {
   constructor() {
     super();
     this.interfaceUser = new UserInterface();
-    this.notes = [];
     this.pageNumber = 0;
   }
 
@@ -105,7 +102,24 @@ class Garage extends API {
       () => {}
     )) as unknown as IEngine;
     const time = Math.floor(+obj.distance / +obj.velocity);
-    this.animationDrive(time, id).finally(() => {});
+    await this.animationDrive(time, id).finally(() => {});
+    await this.race();
+    this.fastest.push({
+      id,
+      wins: 1,
+      time,
+    });
+    if (this.fastest.length === this.notes.length) {
+      const minTime = Math.min(...this.fastest.map((e) => e.time));
+      this.fastest.forEach((e) => {
+        if (e.time === minTime) {
+          this.createWinner(e).finally(() => {});
+          (
+            document.querySelector(".showWinner") as HTMLParagraphElement
+          ).innerHTML = `Winner: ${el.id} ${e.time / 1000}s!`;
+        }
+      });
+    }
   }
 
   async startDrivingOneCar(): Promise<void> {
@@ -120,7 +134,7 @@ class Garage extends API {
           `stop-${id}`
         ) as HTMLButtonElement;
         stopBtn.disabled = false;
-        this.startDriving(id).finally(() => {});
+        await this.startDriving(id).finally(() => {});
       };
     });
   }

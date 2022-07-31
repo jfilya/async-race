@@ -1,4 +1,4 @@
-import { ICars, IEngine } from "../types/interface";
+import { ICars, IEngine, IWinner } from "../types/interface";
 
 class API {
   baseUrl: string;
@@ -11,12 +11,18 @@ class API {
 
   cars: ICars[];
 
+  notes: Array<ICars>;
+
+  fastest: Array<IWinner>;
+
   constructor() {
     this.baseUrl = "http://127.0.0.1:3000";
     this.garage = `${this.baseUrl}/garage`;
     this.engine = `${this.baseUrl}/engine`;
     this.winners = `${this.baseUrl}/winners`;
     this.cars = [];
+    this.notes = [];
+    this.fastest = [];
   }
 
   async get(): Promise<void> {
@@ -84,6 +90,23 @@ class API {
     ).text();
     const content = JSON.parse(await response) as Promise<string>;
     return content as unknown as IEngine;
+  }
+
+  async createWinner(el: IWinner): Promise<void> {
+    await fetch(`${this.winners}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify(el),
+    });
+  }
+
+  async getWinner(): Promise<IWinner> {
+    const response = await fetch(`${this.winners}`);
+    const content = await response.text();
+    const win = JSON.parse(content) as IWinner;
+    return win;
   }
 }
 export default API;
