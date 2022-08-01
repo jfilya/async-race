@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/comma-dangle */
-import { ICars, IEngine } from "../../types/interface";
+import { ICars, IEngine, IWinner } from "../../types/interface";
 import API from "../API";
 import UserInterface from "../user-interface";
 
@@ -96,7 +96,7 @@ class Garage extends API {
     });
   }
 
-  async startDriving(id: string): Promise<void> {
+  async startDriving(id: string): Promise<number> {
     const el = await this.getCar(id);
     const obj = (await this.startDrive(el).finally(
       () => {}
@@ -104,28 +104,7 @@ class Garage extends API {
     const time = Math.floor(+obj.distance / +obj.velocity);
     await this.animationDrive(time, id).finally(() => {});
     await this.race();
-    this.fastest.push({
-      id,
-      wins: 1,
-      time,
-    });
-    if (this.fastest.length === this.notes.length) {
-      const minTime = Math.min(...this.fastest.map((e) => e.time));
-      this.fastest.forEach((e) => {
-        if (e.time === minTime) {
-          const name = (
-            document.getElementById(`carName-${e.id}`) as HTMLSpanElement
-          ).innerHTML;
-          (
-            document.querySelector(".showWinner") as HTMLParagraphElement
-          ).innerHTML = `Winner: ${name} <br> time: ${e.time / 1000}s!`;
-          (
-            document.querySelector(".showWinner") as HTMLParagraphElement
-          ).style.visibility = "visible";
-        }
-        this.createWinner(e).finally(() => {});
-      });
-    }
+    return time;
   }
 
   async startDrivingOneCar(): Promise<void> {
@@ -257,9 +236,45 @@ class Garage extends API {
       stopBtn.forEach((e) => {
         e.disabled = false;
       });
-      carsOnPage.forEach((e) => {
+      let minTime = 0;
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      carsOnPage.forEach(async (e) => {
         const id = e.id.replace(/[^0-9]/g, "");
-        this.startDriving(id).finally(() => {});
+        const time = await this.startDriving(id).finally(() => {});
+        if (minTime === 0 || minTime > time) {
+          minTime = time;
+          const el = {
+            id,
+            wins: 1,
+            time,
+          } as IWinner;
+          const flag = (
+            document.getElementById(`flag${el.id}`) as HTMLDivElement
+          ).getBoundingClientRect().left;
+          const step = () => {
+            const car = (
+              document.getElementById(`car-${el.id}`) as HTMLDivElement
+            ).getBoundingClientRect().left;
+            console.log(car, flag);
+            if (car < flag) {
+              requestAnimationFrame(step);
+            }
+            if (car >= flag) {
+              const name = (
+                document.getElementById(`carName-${el.id}`) as HTMLSpanElement
+              ).innerHTML;
+              (
+                document.querySelector(".showWinner") as HTMLParagraphElement
+              ).innerHTML = `Winner: ${name} <br> time: ${minTime / 1000}s!`;
+              (
+                document.querySelector(".showWinner") as HTMLParagraphElement
+              ).style.visibility = "visible";
+              this.createWinner(el).finally(() => {});
+              window.cancelAnimationFrame(Number(el.id));
+            }
+          };
+          step();
+        }
       });
     };
   }
