@@ -113,11 +113,17 @@ class Garage extends API {
       const minTime = Math.min(...this.fastest.map((e) => e.time));
       this.fastest.forEach((e) => {
         if (e.time === minTime) {
-          this.createWinner(e).finally(() => {});
+          const name = (
+            document.getElementById(`carName-${e.id}`) as HTMLSpanElement
+          ).innerHTML;
           (
             document.querySelector(".showWinner") as HTMLParagraphElement
-          ).innerHTML = `Winner: ${el.id} ${e.time / 1000}s!`;
+          ).innerHTML = `Winner: ${name} <br> time: ${e.time / 1000}s!`;
+          (
+            document.querySelector(".showWinner") as HTMLParagraphElement
+          ).style.visibility = "visible";
         }
+        this.createWinner(e).finally(() => {});
       });
     }
   }
@@ -280,6 +286,9 @@ class Garage extends API {
         const id = e.id.replace(/[^0-9]/g, "");
         this.removeDriving(id).finally(() => {});
       });
+      (
+        document.querySelector(".showWinner") as HTMLParagraphElement
+      ).style.visibility = "hidden";
     };
   }
 }

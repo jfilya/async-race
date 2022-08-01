@@ -123,7 +123,7 @@ class UserInterface implements INav {
     <div class="generalBtn">
       <button class="btn selectBtn" id="select-${car.id}">Select</button>
       <button class="btn removeBtn" id="remove-${car.id}">Remove</button>
-      <span class="carName">${car.name}</span>
+      <span class="carName" id="carName-${car.id}">${car.name}</span>
     </div>
     <div class="road">
       <div class="launch">
