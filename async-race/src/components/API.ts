@@ -13,8 +13,6 @@ class API {
 
   notes: Array<ICars>;
 
-  fastest: Array<IWinner>;
-
   constructor() {
     this.baseUrl = "http://127.0.0.1:3000";
     this.garage = `${this.baseUrl}/garage`;
@@ -22,7 +20,6 @@ class API {
     this.winners = `${this.baseUrl}/winners`;
     this.cars = [];
     this.notes = [];
-    this.fastest = [];
   }
 
   async get(): Promise<void> {
