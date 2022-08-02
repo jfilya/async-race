@@ -96,7 +96,7 @@ class Garage extends API {
     });
   }
 
-  async startDriving(id: string): Promise<number> {
+  async startDriving(id: string): Promise<{ id: string; time: number }> {
     const el = await this.getCar(id);
     const obj = (await this.startDrive(el).finally(
       () => {}
@@ -104,7 +104,10 @@ class Garage extends API {
     const time = Math.floor(+obj.distance / +obj.velocity);
     await this.animationDrive(time, id).finally(() => {});
     await this.race();
-    return time;
+    return {
+      id,
+      time,
+    };
   }
 
   async startDrivingOneCar(): Promise<void> {
@@ -236,46 +239,47 @@ class Garage extends API {
       stopBtn.forEach((e) => {
         e.disabled = false;
       });
-      let minTime = 0;
+      const arr: { name: string; id: string; time: number }[] = [];
+      let el = {} as IWinner;
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       carsOnPage.forEach(async (e) => {
         const id = e.id.replace(/[^0-9]/g, "");
-        const time = await this.startDriving(id).finally(() => {});
-        if (minTime === 0 || minTime > time) {
-          minTime = time;
-          const el = {
-            id,
-            wins: 1,
-            time,
-          } as IWinner;
-          const flag = (
-            document.getElementById(`flag${el.id}`) as HTMLDivElement
+        const element = await this.startDriving(id).finally(() => {});
+        const flag = (
+          document.getElementById(`flag${id}`) as HTMLDivElement
+        ).getBoundingClientRect().left;
+        const step = () => {
+          const car = (
+            document.getElementById(`car-${id}`) as HTMLDivElement
           ).getBoundingClientRect().left;
-          const step = () => {
-            const car = (
-              document.getElementById(`car-${el.id}`) as HTMLDivElement
-            ).getBoundingClientRect().left;
-            console.log(car, flag);
-            if (car < flag) {
-              requestAnimationFrame(step);
-            }
-            if (car >= flag) {
-              const name = (
-                document.getElementById(`carName-${el.id}`) as HTMLSpanElement
-              ).innerHTML;
-              (
-                document.querySelector(".showWinner") as HTMLParagraphElement
-              ).innerHTML = `Winner: ${name} <br> time: ${minTime / 1000}s!`;
-              (
-                document.querySelector(".showWinner") as HTMLParagraphElement
-              ).style.visibility = "visible";
-              this.createWinner(el).finally(() => {});
-              window.cancelAnimationFrame(Number(el.id));
-            }
-          };
-          step();
-        }
+          if (car < flag) {
+            requestAnimationFrame(step);
+          }
+          if (car >= flag) {
+            const name = (
+              document.getElementById(`carName-${id}`) as HTMLSpanElement
+            ).innerHTML;
+            const time = element.id === id ? element.time : 0;
+            arr.push({ name, id, time });
+            console.log(arr);
+            (
+              document.querySelector(".showWinner") as HTMLParagraphElement
+            ).innerHTML = `Winner: ${arr[0].name} <br> time: ${
+              arr[0].time / 1000
+            }s!`;
+            (
+              document.querySelector(".showWinner") as HTMLParagraphElement
+            ).style.visibility = "visible";
+            el = {
+              id: arr[0].id,
+              wins: 1,
+              time: arr[0].time,
+            } as IWinner;
+          }
+        };
+        step();
       });
+      this.createWinner(el).finally(() => {});
     };
   }
 
