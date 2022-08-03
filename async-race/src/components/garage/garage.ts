@@ -11,11 +11,14 @@ class Garage extends API {
 
   win: Winners;
 
+  notes: Array<ICars>;
+
   constructor() {
     super();
     this.interfaceUser = new UserInterface();
     this.pageNumber = 0;
     this.win = new Winners();
+    this.notes = [];
   }
 
   async buildCarTable(array: ICars[]): Promise<void> {

@@ -11,7 +11,7 @@ class API {
 
   cars: ICars[];
 
-  notes: Array<ICars>;
+  winnersElements: IWinner[];
 
   constructor() {
     this.baseUrl = "http://127.0.0.1:3000";
@@ -19,7 +19,7 @@ class API {
     this.engine = `${this.baseUrl}/engine`;
     this.winners = `${this.baseUrl}/winners`;
     this.cars = [];
-    this.notes = [];
+    this.winnersElements = [] as IWinner[];
   }
 
   async get(): Promise<void> {
@@ -104,11 +104,10 @@ class API {
     });
   }
 
-  async getWinners(): Promise<IWinner[]> {
+  async getWinners(): Promise<void> {
     const response = await fetch(`${this.winners}`);
     const content = await response.text();
-    const win = JSON.parse(content) as IWinner[];
-    return win;
+    this.winnersElements = JSON.parse(content) as IWinner[];
   }
 
   async getWinner(id: string): Promise<IWinner> {

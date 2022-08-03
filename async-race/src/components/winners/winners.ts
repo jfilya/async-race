@@ -6,9 +6,15 @@ import UserInterface from "../user-interface";
 class Winners extends API {
   interfaceUser: UserInterface;
 
+  pageNumberWin: number;
+
+  notesWinners: IWinner[];
+
   constructor() {
     super();
     this.interfaceUser = new UserInterface();
+    this.notesWinners = [] as IWinner[];
+    this.pageNumberWin = 0;
   }
 
   async writeWinner(
@@ -73,15 +79,14 @@ class Winners extends API {
       } as IWinner;
       this.changeWinner(elementWinner).finally(() => {});
     }
-    await this.buildWinners().finally(() => {});
+    await this.paginationWin().finally(() => {});
   }
 
-  async buildWinners(): Promise<void> {
+  async buildWinners(array: IWinner[]): Promise<void> {
     const table = document.querySelector(".tbody") as HTMLTableSectionElement;
     table.innerHTML = "";
-    const elementsWinner = await this.getWinners();
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    elementsWinner.forEach(async (element, index) => {
+    array.forEach(async (element, index) => {
       const status = await this.getCarStatus(element.id);
       if (!status) {
         this.deleteWinner(element.id).finally(() => {});
@@ -90,6 +95,65 @@ class Winners extends API {
         this.interfaceUser.buildWinnersTable(element, car, index + 1);
       }
     });
+  }
+
+  async paginationNumberPageWin(count: number): Promise<void> {
+    const pagination = document.querySelector(
+      ".paginationWinners"
+    ) as HTMLUListElement;
+    let paginationNumberOfPage = "";
+    for (let i = 1; i <= count; i += 1) {
+      paginationNumberOfPage += `<li>${i}</li>`;
+    }
+    pagination.innerHTML = paginationNumberOfPage;
+  }
+
+  async showPageWin(li: Element): Promise<void> {
+    const active = document.querySelector(
+      ".paginationWinners li.activeList"
+    ) as HTMLLIElement;
+    if (active) {
+      active.classList.remove("activeList");
+    }
+    li.classList.add("activeList");
+    const start = (Number(li.innerHTML) - 1) * 10;
+    const end = (Number(li.innerHTML) - 1) * 10 + 10;
+    this.notesWinners = this.winnersElements.slice(start, end);
+    await this.buildWinners(this.notesWinners).finally(() => {});
+  }
+
+  async paginationWin(): Promise<void> {
+    await this.getWinners();
+    const countOfItem: number = Math.ceil(this.winnersElements.length / 10);
+    await this.paginationNumberPageWin(countOfItem);
+    const list = document.querySelectorAll(".paginationWinners li");
+    const arrowLeft = document.querySelector(
+      "#paginationWinners-prev"
+    ) as HTMLButtonElement;
+    const arrowRight = document.querySelector(
+      "#paginationWinners-next"
+    ) as HTMLButtonElement;
+    const disableBtn = () => {
+      if (this.pageNumberWin === countOfItem - 1) arrowRight.disabled = true;
+      if (this.pageNumberWin < countOfItem - 1) arrowRight.disabled = false;
+      if (this.pageNumberWin === 0) arrowLeft.disabled = true;
+      if (this.pageNumberWin > 0) arrowLeft.disabled = false;
+    };
+    if (!list[this.pageNumberWin]) {
+      this.pageNumberWin -= 1;
+    }
+    disableBtn();
+    arrowRight.onclick = async () => {
+      this.pageNumberWin += 1;
+      disableBtn();
+      await this.showPageWin(list[this.pageNumberWin]).finally(() => {});
+    };
+    arrowLeft.onclick = async () => {
+      this.pageNumberWin -= 1;
+      disableBtn();
+      await this.showPageWin(list[this.pageNumberWin]).finally(() => {});
+    };
+    this.showPageWin(list[this.pageNumberWin]).finally(() => {});
   }
 }
 

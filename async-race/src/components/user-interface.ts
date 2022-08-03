@@ -148,6 +148,10 @@ class UserInterface implements INav {
 
   buildWinnersTableHeader(): void {
     this.winners.innerHTML += `
+    <div class="listPaginationWinners">
+    Page № 
+    <ul class="paginationWinners"></ul>
+    </div>
     <table class="table">
       <thead>
         <tr>
@@ -160,7 +164,11 @@ class UserInterface implements INav {
       </thead>
       <tbody class="tbody">
       </tbody>
-    </table>`;
+    </table>
+    <div class="buttonPrevNext">
+    <button class="btnPagination" id="paginationWinners-prev">🢀</button>
+    <button class="btnPagination" id="paginationWinners-next">🢂</button>
+  </div>`;
   }
 
   buildWinnersTable(winner: IWinner, car: ICars, count: number): void {
