@@ -1,10 +1,16 @@
-#winners{
-    z-index: 1;
-    position: absolute;
+#winners {
+  z-index: 1;
+  position: absolute;
 }
-#winners.active{
-    z-index: 2;
-    background: black;
-    height: 90vh;
-    width: 100vw;
+#winners.active {
+  z-index: 2;
+  background: black;
+  height: 90vh;
+  width: 100vw;
+}
+table {
+  width: 500px;
+}
+thead {
+  background: blueviolet;
 }
