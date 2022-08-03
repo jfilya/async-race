@@ -110,5 +110,15 @@ class API {
     const response = await fetch(`${this.winners}/${id}`);
     return response.ok;
   }
+
+  async changeWinner(el: IWinner): Promise<void> {
+    await fetch(`${this.winners}/${el.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+      body: JSON.stringify(el),
+    });
+  }
 }
 export default API;

@@ -38,7 +38,7 @@ class Winners extends API {
         showWinner.style.visibility = "visible";
         if (arr.length === 1) {
           const createWin = async () => {
-            const elementWinner = {
+            let elementWinner = {
               id: arr[0].id,
               wins: 1,
               time: arr[0].time,
@@ -46,6 +46,13 @@ class Winners extends API {
             const status = await this.getWinnerStatus(elementWinner.id);
             if (!status) {
               this.createWinner(elementWinner).finally(() => {});
+            } else {
+              elementWinner = {
+                id: arr[0].id,
+                wins: (elementWinner.wins += 1),
+                time: time < elementWinner.time ? time : elementWinner.time,
+              } as IWinner;
+              this.changeWinner(elementWinner).finally(() => {});
             }
           };
           createWin().finally(() => {});
