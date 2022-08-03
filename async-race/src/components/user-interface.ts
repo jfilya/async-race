@@ -1,4 +1,4 @@
-import { ICars, INav } from "../types/interface";
+import { ICars, INav, IWinner } from "../types/interface";
 
 class UserInterface implements INav {
   garage: HTMLElement;
@@ -144,6 +144,34 @@ class UserInterface implements INav {
   showWinner(): void {
     this.garage.innerHTML += `
     <p class="showWinner"><p>`;
+  }
+
+  buildWinnersTableHeader(): void {
+    this.winners.innerHTML += `
+    <table class="table">
+      <thead>
+        <tr>
+            <th>Number</th>
+            <th>Car</th>
+            <th>Name</th>
+            <th>Wins</th>
+            <th>Best time</th>
+        </tr>
+      </thead>
+      <tbody class="tbody">
+      </tbody>
+    </table>`;
+  }
+
+  buildWinnersTable(winner: IWinner, car: ICars, count: number): void {
+    (document.querySelector(".tbody") as HTMLTableSectionElement).innerHTML += `
+        <tr>
+            <td>${count}</td>
+            <td>${this.createColorImg(car.color)}</td>
+            <td>${car.name}</td>
+            <td>${winner.wins}</td>
+            <td>${winner.time / 1000}</td>
+        </tr>`;
   }
 }
 

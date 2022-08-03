@@ -10,5 +10,6 @@ interfaceUser.createWinners();
 interfaceUser.clickBtn();
 interfaceUser.createInput();
 interfaceUser.showWinner();
+interfaceUser.buildWinnersTableHeader();
 const garage = new Garage();
 garage.pagination().finally(() => {});

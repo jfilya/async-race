@@ -179,12 +179,12 @@ class Garage extends API {
 
   async showPage(li: Element): Promise<void> {
     const active = document.querySelector(
-      ".pagination li.active"
+      ".pagination li.activeList"
     ) as HTMLLIElement;
     if (active) {
-      active.classList.remove("active");
+      active.classList.remove("activeList");
     }
-    li.classList.add("active");
+    li.classList.add("activeList");
     const start = (Number(li.innerHTML) - 1) * 7;
     const end = (Number(li.innerHTML) - 1) * 7 + 7;
     this.notes = this.cars.slice(start, end);

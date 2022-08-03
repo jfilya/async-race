@@ -1,11 +1,15 @@
 /* eslint-disable @typescript-eslint/comma-dangle */
 import { IWinner } from "../../types/interface";
 import API from "../API";
+import UserInterface from "../user-interface";
 
 class Winners extends API {
-  // constructor() {
-  //   super();
-  // }
+  interfaceUser: UserInterface;
+
+  constructor() {
+    super();
+    this.interfaceUser = new UserInterface();
+  }
 
   async writeWinner(
     id: string,
@@ -61,13 +65,26 @@ class Winners extends API {
     if (!status) {
       this.createWinner(elementWinner).finally(() => {});
     } else {
+      const newElementWinner = await this.getWinner(elementWinner.id);
       elementWinner = {
-        id: e.id,
-        wins: (elementWinner.wins += 1),
-        time: time < elementWinner.time ? time : elementWinner.time,
+        id: newElementWinner.id,
+        wins: (newElementWinner.wins += 1),
+        time: time < newElementWinner.time ? time : newElementWinner.time,
       } as IWinner;
       this.changeWinner(elementWinner).finally(() => {});
     }
+    await this.buildWinners().finally(() => {});
+  }
+
+  async buildWinners(): Promise<void> {
+    const table = document.querySelector(".tbody") as HTMLTableSectionElement;
+    table.innerHTML = "";
+    const elementsWinner = await this.getWinners();
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    elementsWinner.forEach(async (element, index) => {
+      const car = await this.getCar(element.id);
+      this.interfaceUser.buildWinnersTable(element, car, index + 1);
+    });
   }
 }
 

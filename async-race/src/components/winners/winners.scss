@@ -1,11 +1,9 @@
 #winners{
-    z-index: -1;
-    visibility: hidden;
+    z-index: 1;
     position: absolute;
 }
 #winners.active{
     z-index: 2;
-    visibility: visible;
     background: black;
     height: 90vh;
     width: 100vw;

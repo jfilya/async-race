@@ -99,8 +99,15 @@ class API {
     });
   }
 
-  async getWinner(): Promise<IWinner> {
+  async getWinners(): Promise<IWinner[]> {
     const response = await fetch(`${this.winners}`);
+    const content = await response.text();
+    const win = JSON.parse(content) as IWinner[];
+    return win;
+  }
+
+  async getWinner(id: string): Promise<IWinner> {
+    const response = await fetch(`${this.winners}/${id}`);
     const content = await response.text();
     const win = JSON.parse(content) as IWinner;
     return win;
