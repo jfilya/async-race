@@ -241,6 +241,9 @@ class Garage extends API {
       });
       const arr: { name: string; id: string; time: number }[] = [];
       let el = {} as IWinner;
+      const showWinner = document.querySelector(
+        ".showWinner"
+      ) as HTMLParagraphElement;
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       carsOnPage.forEach(async (e) => {
         const id = e.id.replace(/[^0-9]/g, "");
@@ -252,34 +255,25 @@ class Garage extends API {
           const car = (
             document.getElementById(`car-${id}`) as HTMLDivElement
           ).getBoundingClientRect().left;
-          if (car < flag) {
-            requestAnimationFrame(step);
-          }
+          if (car < flag) requestAnimationFrame(step);
           if (car >= flag) {
             const name = (
               document.getElementById(`carName-${id}`) as HTMLSpanElement
             ).innerHTML;
             const time = element.id === id ? element.time : 0;
             arr.push({ name, id, time });
-            console.log(arr);
-            (
-              document.querySelector(".showWinner") as HTMLParagraphElement
-            ).innerHTML = `Winner: ${arr[0].name} <br> time: ${
+            showWinner.innerHTML = `Winner: ${arr[0].name} <br> time: ${
               arr[0].time / 1000
             }s!`;
-            (
-              document.querySelector(".showWinner") as HTMLParagraphElement
-            ).style.visibility = "visible";
-            el = {
-              id: arr[0].id,
-              wins: 1,
-              time: arr[0].time,
-            } as IWinner;
+            showWinner.style.visibility = "visible";
+            if (Object.keys(el).length === 0) {
+              el = { id: arr[0].id, wins: 1, time: arr[0].time } as IWinner;
+              this.createWinner(el).finally(() => {});
+            }
           }
         };
         step();
       });
-      this.createWinner(el).finally(() => {});
     };
   }
 
