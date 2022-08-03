@@ -37,29 +37,37 @@ class Winners extends API {
         }s!`;
         showWinner.style.visibility = "visible";
         if (arr.length === 1) {
-          const createWin = async () => {
-            let elementWinner = {
-              id: arr[0].id,
-              wins: 1,
-              time: arr[0].time,
-            } as IWinner;
-            const status = await this.getWinnerStatus(elementWinner.id);
-            if (!status) {
-              this.createWinner(elementWinner).finally(() => {});
-            } else {
-              elementWinner = {
-                id: arr[0].id,
-                wins: (elementWinner.wins += 1),
-                time: time < elementWinner.time ? time : elementWinner.time,
-              } as IWinner;
-              this.changeWinner(elementWinner).finally(() => {});
-            }
-          };
-          createWin().finally(() => {});
+          this.createWin(arr[0], time).finally(() => {});
         }
       }
     };
     step();
+  }
+
+  async createWin(
+    e: {
+      name: string;
+      id: string;
+      time: number;
+    },
+    time: number
+  ): Promise<void> {
+    let elementWinner = {
+      id: e.id,
+      wins: 1,
+      time: e.time,
+    } as IWinner;
+    const status = await this.getWinnerStatus(elementWinner.id);
+    if (!status) {
+      this.createWinner(elementWinner).finally(() => {});
+    } else {
+      elementWinner = {
+        id: e.id,
+        wins: (elementWinner.wins += 1),
+        time: time < elementWinner.time ? time : elementWinner.time,
+      } as IWinner;
+      this.changeWinner(elementWinner).finally(() => {});
+    }
   }
 }
 
