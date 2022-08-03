@@ -227,10 +227,13 @@ class Garage extends API {
 
   async race(): Promise<void> {
     const raceBtn = document.getElementById("race") as HTMLInputElement;
+    const resetRaceBtn = document.getElementById("reset") as HTMLInputElement;
     const carsOnPage = document.querySelectorAll(
       ".car"
     ) as unknown as HTMLDivElement[];
     raceBtn.onclick = async () => {
+      raceBtn.disabled = true;
+      resetRaceBtn.disabled = false;
       const startBtn = document.querySelectorAll(
         ".startIcon"
       ) as unknown as HTMLButtonElement[];
@@ -254,11 +257,14 @@ class Garage extends API {
   }
 
   async resetRace(): Promise<void> {
+    const raceBtn = document.getElementById("race") as HTMLInputElement;
     const resetRaceBtn = document.getElementById("reset") as HTMLInputElement;
     const carsOnPage = document.querySelectorAll(
       ".car"
     ) as unknown as HTMLDivElement[];
     resetRaceBtn.onclick = async () => {
+      raceBtn.disabled = false;
+      resetRaceBtn.disabled = true;
       const startBtn = document.querySelectorAll(
         ".startIcon"
       ) as unknown as HTMLButtonElement[];

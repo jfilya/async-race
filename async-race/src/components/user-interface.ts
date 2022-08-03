@@ -81,7 +81,7 @@ class UserInterface implements INav {
     </div>
     <div class="allBtn">  
       <input type="submit" value="race" id="race">
-      <input type="submit" value="reset" id="reset">
+      <input type="submit" value="reset" id="reset" disabled>
       <input type="submit" value="generate cars">
   </div>`;
   }
