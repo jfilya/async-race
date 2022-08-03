@@ -12,4 +12,3 @@ interfaceUser.createInput();
 interfaceUser.showWinner();
 const garage = new Garage();
 garage.pagination().finally(() => {});
-// const winner = new Winners();

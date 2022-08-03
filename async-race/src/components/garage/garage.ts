@@ -1,17 +1,21 @@
 /* eslint-disable @typescript-eslint/comma-dangle */
-import { ICars, IEngine, IWinner } from "../../types/interface";
+import { ICars, IEngine } from "../../types/interface";
 import API from "../API";
 import UserInterface from "../user-interface";
+import Winners from "../winners/winners";
 
 class Garage extends API {
   pageNumber: number;
 
   interfaceUser: UserInterface;
 
+  win: Winners;
+
   constructor() {
     super();
     this.interfaceUser = new UserInterface();
     this.pageNumber = 0;
+    this.win = new Winners();
   }
 
   async buildCarTable(array: ICars[]): Promise<void> {
@@ -240,39 +244,11 @@ class Garage extends API {
         e.disabled = false;
       });
       const arr: { name: string; id: string; time: number }[] = [];
-      let el = {} as IWinner;
-      const showWinner = document.querySelector(
-        ".showWinner"
-      ) as HTMLParagraphElement;
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       carsOnPage.forEach(async (e) => {
         const id = e.id.replace(/[^0-9]/g, "");
         const element = await this.startDriving(id).finally(() => {});
-        const flag = (
-          document.getElementById(`flag${id}`) as HTMLDivElement
-        ).getBoundingClientRect().left;
-        const step = () => {
-          const car = (
-            document.getElementById(`car-${id}`) as HTMLDivElement
-          ).getBoundingClientRect().left;
-          if (car < flag) requestAnimationFrame(step);
-          if (car >= flag) {
-            const name = (
-              document.getElementById(`carName-${id}`) as HTMLSpanElement
-            ).innerHTML;
-            const time = element.id === id ? element.time : 0;
-            arr.push({ name, id, time });
-            showWinner.innerHTML = `Winner: ${arr[0].name} <br> time: ${
-              arr[0].time / 1000
-            }s!`;
-            showWinner.style.visibility = "visible";
-            if (Object.keys(el).length === 0) {
-              el = { id: arr[0].id, wins: 1, time: arr[0].time } as IWinner;
-              this.createWinner(el).finally(() => {});
-            }
-          }
-        };
-        step();
+        this.win.writeWinner(id, element, arr).finally(() => {});
       });
     };
   }
