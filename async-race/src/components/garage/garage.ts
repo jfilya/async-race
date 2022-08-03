@@ -165,6 +165,9 @@ class Garage extends API {
         ) as HTMLButtonElement;
         startBtn.disabled = false;
         await this.removeDriving(id);
+        (
+          document.querySelector(".showWinner") as HTMLParagraphElement
+        ).style.visibility = "hidden";
       };
     });
   }
@@ -192,6 +195,10 @@ class Garage extends API {
     const end = (Number(li.innerHTML) - 1) * 7 + 7;
     this.notes = this.cars.slice(start, end);
     await this.buildCarTable(this.notes).finally(() => {});
+    const raceBtn = document.getElementById("race") as HTMLInputElement;
+    const resetRaceBtn = document.getElementById("reset") as HTMLInputElement;
+    raceBtn.disabled = false;
+    resetRaceBtn.disabled = true;
   }
 
   async pagination(): Promise<void> {
@@ -226,6 +233,9 @@ class Garage extends API {
       await this.showPage(list[this.pageNumber]).finally(() => {});
     };
     this.showPage(list[this.pageNumber]).finally(() => {});
+    (
+      document.querySelector(".showWinner") as HTMLParagraphElement
+    ).style.visibility = "hidden";
   }
 
   async race(): Promise<void> {
