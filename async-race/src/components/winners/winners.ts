@@ -82,8 +82,13 @@ class Winners extends API {
     const elementsWinner = await this.getWinners();
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     elementsWinner.forEach(async (element, index) => {
-      const car = await this.getCar(element.id);
-      this.interfaceUser.buildWinnersTable(element, car, index + 1);
+      const status = await this.getCarStatus(element.id);
+      if (!status) {
+        this.deleteWinner(element.id).finally(() => {});
+      } else {
+        const car = await this.getCar(element.id);
+        this.interfaceUser.buildWinnersTable(element, car, index + 1);
+      }
     });
   }
 }

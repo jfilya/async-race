@@ -28,6 +28,11 @@ class API {
     this.cars = JSON.parse(content) as ICars[];
   }
 
+  async getCarStatus(id: string): Promise<boolean> {
+    const response = await fetch(`${this.garage}/${id}`);
+    return response.ok;
+  }
+
   async post(el: ICars): Promise<void> {
     await fetch(`${this.garage}`, {
       method: "POST",
@@ -125,6 +130,12 @@ class API {
         "Content-Type": "application/json;charset=utf-8",
       },
       body: JSON.stringify(el),
+    });
+  }
+
+  async deleteWinner(id: string): Promise<void> {
+    await fetch(`${this.winners}/${id}`, {
+      method: "DELETE",
     });
   }
 }
