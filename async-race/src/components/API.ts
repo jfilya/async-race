@@ -105,5 +105,10 @@ class API {
     const win = JSON.parse(content) as IWinner;
     return win;
   }
+
+  async getWinnerStatus(id: string): Promise<boolean> {
+    const response = await fetch(`${this.winners}/${id}`);
+    return response.ok;
+  }
 }
 export default API;

@@ -37,13 +37,18 @@ class Winners extends API {
         }s!`;
         showWinner.style.visibility = "visible";
         if (arr.length === 1) {
-          const elementWinner = {
-            id: arr[0].id,
-            wins: 1,
-            time: arr[0].time,
-          } as IWinner;
-          console.log(elementWinner);
-          this.createWinner(elementWinner).finally(() => {});
+          const createWin = async () => {
+            const elementWinner = {
+              id: arr[0].id,
+              wins: 1,
+              time: arr[0].time,
+            } as IWinner;
+            const status = await this.getWinnerStatus(elementWinner.id);
+            if (!status) {
+              this.createWinner(elementWinner).finally(() => {});
+            }
+          };
+          createWin().finally(() => {});
         }
       }
     };
