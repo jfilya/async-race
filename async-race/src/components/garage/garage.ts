@@ -27,7 +27,7 @@ class Garage extends API {
     array.forEach((car) => {
       this.interfaceUser.renderCar(car);
     });
-    this.getCars();
+    await this.getCars();
     this.deleteCar();
     this.updateCar();
     this.startDrivingOneCar().finally(() => {});
@@ -36,8 +36,9 @@ class Garage extends API {
     this.resetRace().finally(() => {});
   }
 
-  getCars(): void {
-    (document.getElementById("create") as HTMLInputElement).onclick = () => {
+  async getCars(): Promise<void> {
+    const create = document.getElementById("create") as HTMLInputElement;
+    create.onclick = async () => {
       const createName = document.querySelector("#name") as HTMLInputElement;
       const createColor = document.querySelector("#color") as HTMLInputElement;
       const obj: ICars = {
@@ -49,9 +50,8 @@ class Garage extends API {
         obj.name = createName.value;
         obj.color = createColor.value;
 
-        this.post(obj).finally(() => {});
-        this.pagination().finally(() => {});
-
+        await this.post(obj).finally(() => {});
+        await this.pagination().finally(() => {});
         createName.value = "";
       }
     };
