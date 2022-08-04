@@ -99,7 +99,7 @@ class UserInterface implements INav {
       garage.classList.add("notActive");
       winners.classList.add("active");
     };
-    window.onclick = () => {
+    document.body.onclick = () => {
       (
         document.querySelector(".showWinner") as HTMLParagraphElement
       ).style.visibility = "hidden";

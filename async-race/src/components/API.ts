@@ -94,15 +94,16 @@ class API {
     return content as unknown as IEngine;
   }
 
-  async engineDrive(el: { id: string; time: number }): Promise<number> {
-    const response = await fetch(`${this.engine}?id=${el.id}&status=drive`, {
+  async engineDrive(id: string): Promise<{ success: boolean }> {
+    const response = await fetch(`${this.engine}?id=${id}&status=drive`, {
       method: "PATCH",
-      headers: {
-        "Content-Type": "application/json;charset=utf-8",
-      },
-      body: JSON.stringify(el),
-    });
-    return response.status;
+    }).catch();
+    if (response.ok) {
+      const json = await response.text();
+      const res = JSON.parse(json) as { success: boolean };
+      return res;
+    }
+    return { success: false };
   }
 
   async createWinner(el: IWinner): Promise<void> {
