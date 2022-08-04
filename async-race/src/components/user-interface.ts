@@ -82,7 +82,7 @@ class UserInterface implements INav {
     <div class="allBtn">  
       <input type="submit" value="race" id="race">
       <input type="submit" value="reset" id="reset" disabled>
-      <input type="submit" value="generate cars">
+      <input type="submit" value="generate cars" id="generate">
   </div>`;
   }
 
@@ -180,6 +180,53 @@ class UserInterface implements INav {
             <td>${winner.wins}</td>
             <td>${winner.time / 1000}</td>
         </tr>`;
+  }
+
+  randomNameCars(): string {
+    const makes = [
+      "Audi",
+      "Alfa Romeo",
+      "Aston Martin",
+      "BMW",
+      "Bentley",
+      "Bugatti",
+      "DS",
+      "Ferrari",
+      "Fiat",
+      "Ford",
+      "Nissan",
+      "Renault",
+      "Jaguar",
+      "Mazda",
+    ];
+    const models = [
+      "model 5",
+      "CSX",
+      "X7",
+      "L200",
+      "Carisma",
+      "Prelude",
+      "Lachetti",
+      "780",
+      "900",
+      "Y654",
+      "M0",
+      "Logan",
+      "NPM",
+      "AMG",
+    ];
+    const make = makes[Math.floor(Math.random() * makes.length)];
+    const model = models[Math.floor(Math.random() * models.length)];
+    return `${make} ${model}`;
+  }
+
+  randomColor(): string {
+    const simbols = "123456789absdef";
+    let color = "#";
+    for (let i = 0; i < 6; i += 1) {
+      color += simbols[Math.floor(Math.random() * simbols.length)];
+    }
+    return color;
   }
 }
 

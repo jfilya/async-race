@@ -37,6 +37,7 @@ class Garage extends API {
     this.removeDrivingOneCar().finally(() => {});
     this.race().finally(() => {});
     this.resetRace().finally(() => {});
+    this.generateRandomCars().finally(() => {});
   }
 
   async getCars(): Promise<void> {
@@ -297,6 +298,22 @@ class Garage extends API {
       (
         document.querySelector(".showWinner") as HTMLParagraphElement
       ).style.visibility = "hidden";
+    };
+  }
+
+  async generateRandomCars(): Promise<void> {
+    const generateBtn = document.getElementById("generate") as HTMLInputElement;
+    generateBtn.onclick = async () => {
+      const randomCar = new Array(100).fill(1).map(() => ({
+        name: this.interfaceUser.randomNameCars(),
+        color: this.interfaceUser.randomColor(),
+        id: "",
+      }));
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      randomCar.forEach(async (random) => {
+        await this.post(random).finally(() => {});
+      });
+      await this.pagination();
     };
   }
 }
