@@ -303,17 +303,14 @@ class Garage extends API {
 
   async generateRandomCars(): Promise<void> {
     const generateBtn = document.getElementById("generate") as HTMLInputElement;
+    const randomCar = this.interfaceUser.randomCars();
     generateBtn.onclick = async () => {
-      const randomCar = new Array(100).fill(1).map(() => ({
-        name: this.interfaceUser.randomNameCars(),
-        color: this.interfaceUser.randomColor(),
-        id: "",
-      }));
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
-      randomCar.forEach(async (random) => {
-        await this.post(random).finally(() => {});
-      });
-      await this.pagination();
+      generateBtn.disabled = true;
+      generateBtn.value = "WAIT...";
+      await Promise.all(randomCar.map(async (r) => this.post(r)));
+      await this.pagination().finally(() => {});
+      generateBtn.disabled = false;
+      generateBtn.value = "generate";
     };
   }
 }

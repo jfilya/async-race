@@ -228,6 +228,15 @@ class UserInterface implements INav {
     }
     return color;
   }
+
+  randomCars(): ICars[] {
+    const randomCar = new Array(100).fill(1).map(() => ({
+      name: this.randomNameCars(),
+      color: this.randomColor(),
+      id: "",
+    }));
+    return randomCar;
+  }
 }
 
 export default UserInterface;
