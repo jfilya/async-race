@@ -166,9 +166,6 @@ class Garage extends API {
         ) as HTMLButtonElement;
         startBtn.disabled = false;
         await this.removeDriving(id);
-        (
-          document.querySelector(".showWinner") as HTMLParagraphElement
-        ).style.visibility = "hidden";
       };
     });
   }
@@ -234,9 +231,6 @@ class Garage extends API {
       await this.showPage(list[this.pageNumber]).finally(() => {});
     };
     this.showPage(list[this.pageNumber]).finally(() => {});
-    (
-      document.querySelector(".showWinner") as HTMLParagraphElement
-    ).style.visibility = "hidden";
   }
 
   async race(): Promise<void> {

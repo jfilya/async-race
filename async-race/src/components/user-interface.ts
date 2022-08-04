@@ -99,6 +99,11 @@ class UserInterface implements INav {
       garage.classList.add("notActive");
       winners.classList.add("active");
     };
+    window.onclick = () => {
+      (
+        document.querySelector(".showWinner") as HTMLParagraphElement
+      ).style.visibility = "hidden";
+    };
   }
 
   createColorImg(color: string): string {
@@ -221,7 +226,7 @@ class UserInterface implements INav {
   }
 
   randomColor(): string {
-    const simbols = "123456789absdef";
+    const simbols = "123456789abcdef";
     let color = "#";
     for (let i = 0; i < 6; i += 1) {
       color += simbols[Math.floor(Math.random() * simbols.length)];
