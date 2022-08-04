@@ -94,6 +94,17 @@ class API {
     return content as unknown as IEngine;
   }
 
+  async engineDrive(el: { id: string; time: number }): Promise<number> {
+    const response = await fetch(`${this.engine}?id=${el.id}&status=drive`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+      body: JSON.stringify(el),
+    });
+    return response.status;
+  }
+
   async createWinner(el: IWinner): Promise<void> {
     await fetch(`${this.winners}`, {
       method: "POST",

@@ -265,6 +265,14 @@ class Garage extends API {
       carsOnPage.forEach(async (e) => {
         const id = e.id.replace(/[^0-9]/g, "");
         const element = await this.startDriving(id).finally(() => {});
+        const status = await this.engineDrive(element);
+        if (status !== 200) {
+          const car = document.getElementById(`car-${id}`) as HTMLDivElement;
+          const carCoordinates = car.getBoundingClientRect().left;
+          car.style.transform = `translateX(${carCoordinates + 50}px)`;
+          car.style.transition = "5s";
+          window.cancelAnimationFrame(Number(id));
+        }
         this.win.writeWinner(id, element, arr).finally(() => {});
       });
     };
