@@ -69,7 +69,7 @@ class Winners extends API {
     } as IWinner;
     const status = await this.getWinnerStatus(elementWinner.id);
     if (!status) {
-      this.createWinner(elementWinner).finally(() => {});
+      await this.createWinner(elementWinner).finally(() => {});
     } else {
       const newElementWinner = await this.getWinner(elementWinner.id);
       elementWinner = {
@@ -77,7 +77,7 @@ class Winners extends API {
         wins: (newElementWinner.wins += 1),
         time: time < newElementWinner.time ? time : newElementWinner.time,
       } as IWinner;
-      this.changeWinner(elementWinner).finally(() => {});
+      await this.changeWinner(elementWinner).finally(() => {});
     }
     await this.paginationWin().finally(() => {});
   }
