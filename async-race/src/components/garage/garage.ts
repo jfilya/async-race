@@ -306,7 +306,7 @@ class Garage extends API {
     const randomCar = this.interfaceUser.randomCars();
     generateBtn.onclick = async () => {
       generateBtn.disabled = true;
-      generateBtn.value = "WAIT...";
+      generateBtn.value = "await about 10 s...";
       await Promise.all(randomCar.map(async (r) => this.post(r)));
       await this.pagination().finally(() => {});
       generateBtn.disabled = false;
