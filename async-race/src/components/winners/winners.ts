@@ -1,3 +1,4 @@
+/* eslint-disable default-case */
 /* eslint-disable @typescript-eslint/comma-dangle */
 import { IWinner } from "../../types/interface";
 import API from "../API";
@@ -154,6 +155,26 @@ class Winners extends API {
       await this.showPageWin(list[this.pageNumberWin]).finally(() => {});
     };
     this.showPageWin(list[this.pageNumberWin]).finally(() => {});
+  }
+
+  sortAmountWins(): void {
+    const tbody = document.querySelector(".tbody") as HTMLTableSectionElement;
+    const trs = tbody.rows as unknown as HTMLTableRowElement[];
+    const winsSort = document.querySelector(
+      ".wins-sort"
+    ) as HTMLTableCellElement;
+    const bestTime = document.querySelector(
+      ".time-sort"
+    ) as HTMLTableCellElement;
+    const sortTable = (index: number) => {
+      const sorted = [...trs].sort(
+        (a, b) => +a.cells[index].innerHTML - +b.cells[index].innerHTML
+      );
+      tbody.innerHTML = "";
+      sorted.forEach((el) => tbody.append(el));
+    };
+    winsSort.onclick = () => sortTable(3);
+    bestTime.onclick = () => sortTable(4);
   }
 }
 

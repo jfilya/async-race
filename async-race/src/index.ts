@@ -15,3 +15,4 @@ const garage = new Garage();
 garage.pagination().finally(() => {});
 const winners = new Winners();
 winners.paginationWin().finally(() => {});
+winners.sortAmountWins();

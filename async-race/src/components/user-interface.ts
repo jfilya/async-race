@@ -162,13 +162,13 @@ class UserInterface implements INav {
     <ul class="paginationWinners"></ul>
     </div>
     <table class="table">
-      <thead>
+      <thead class="thead">
         <tr>
             <th>Number</th>
             <th>Car</th>
             <th>Name</th>
-            <th>Wins</th>
-            <th>Best time</th>
+            <th class="wins-sort">Wins <span class="wins-sort-arrow"> </span></th>
+            <th class="time-sort">Best time <span class="time-sort-arrow"> </span></th>
         </tr>
       </thead>
       <tbody class="tbody">
