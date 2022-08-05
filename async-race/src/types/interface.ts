@@ -23,3 +23,20 @@ export interface IWinner {
   wins: number;
   time: number;
 }
+
+export interface IWriteElement {
+  id: string;
+  time: number;
+}
+
+export interface IWriteArray {
+  name: string;
+  id: string;
+  time: number;
+}
+
+export interface ICreateWinElement {
+  name: string;
+  id: string;
+  time: number;
+}

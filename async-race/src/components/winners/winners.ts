@@ -1,5 +1,12 @@
 /* eslint-disable @typescript-eslint/comma-dangle */
-import { IWinner } from "../../types/interface";
+import { Arrow, NotesOnPage } from "../../types/enums";
+import {
+  ICreateWinElement,
+  IWinner,
+  IWriteArray,
+  IWriteElement,
+} from "../../types/interface";
+import { SortTable } from "../../types/types";
 import API from "../API";
 import UserInterface from "../user-interface";
 
@@ -19,11 +26,8 @@ class Winners extends API {
 
   async writeWinner(
     id: string,
-    element: {
-      id: string;
-      time: number;
-    },
-    arr: { name: string; id: string; time: number }[]
+    element: IWriteElement,
+    arr: IWriteArray[]
   ): Promise<void> {
     const showWinner = document.querySelector(
       ".showWinner"
@@ -54,14 +58,7 @@ class Winners extends API {
     step();
   }
 
-  async createWin(
-    e: {
-      name: string;
-      id: string;
-      time: number;
-    },
-    time: number
-  ): Promise<void> {
+  async createWin(e: ICreateWinElement, time: number): Promise<void> {
     let elementWinner = {
       id: e.id,
       wins: 1,
@@ -118,15 +115,17 @@ class Winners extends API {
       active.classList.remove("activeList");
     }
     li.classList.add("activeList");
-    const start = (Number(li.innerHTML) - 1) * 10;
-    const end = (Number(li.innerHTML) - 1) * 10 + 10;
+    const start = (Number(li.innerHTML) - 1) * NotesOnPage.win;
+    const end = (Number(li.innerHTML) - 1) * NotesOnPage.win + NotesOnPage.win;
     this.notesWinners = this.winnersElements.slice(start, end);
     await this.buildWinners(this.notesWinners).finally(() => {});
   }
 
   async paginationWin(): Promise<void> {
     await this.getWinners();
-    const countOfItem: number = Math.ceil(this.winnersElements.length / 10);
+    const countOfItem: number = Math.ceil(
+      this.winnersElements.length / NotesOnPage.win
+    );
     await this.paginationNumberPageWin(countOfItem);
     const list = document.querySelectorAll(".paginationWinners li");
     const arrowLeft = document.querySelector(
@@ -167,26 +166,27 @@ class Winners extends API {
     const bestTime = document.querySelector(
       ".time-sort"
     ) as HTMLTableCellElement;
-    const sortTable = (
-      index: number,
-      sortElement: HTMLTableCellElement,
-      nameClass: string,
-      anotherClass: string
+    const sortTable: SortTable = (
+      index,
+      sortElement,
+      nameClass,
+      anotherClass
     ) => {
       sortElement.classList.toggle("sort-up");
       (document.querySelector(anotherClass) as HTMLSpanElement).innerHTML = "";
+      const arrow = document.querySelector(nameClass) as HTMLSpanElement;
       let sorted = [] as HTMLTableRowElement[];
       if (sortElement.classList.contains("sort-up")) {
         sorted = [...trs].sort(
           (a, b) => +a.cells[index].innerHTML - +b.cells[index].innerHTML
         );
-        (document.querySelector(nameClass) as HTMLSpanElement).innerHTML = "↓";
+        arrow.innerHTML = Arrow.down;
       }
       if (!sortElement.classList.contains("sort-up")) {
         sorted = [...trs].sort(
           (a, b) => +b.cells[index].innerHTML - +a.cells[index].innerHTML
         );
-        (document.querySelector(nameClass) as HTMLSpanElement).innerHTML = "↑";
+        arrow.innerHTML = Arrow.up;
       }
       tbody.innerHTML = "";
       sorted.forEach((el) => tbody.append(el));

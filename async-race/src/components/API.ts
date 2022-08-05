@@ -1,40 +1,29 @@
+import { Link, StatusEngine } from "../types/enums";
 import { ICars, IEngine, IWinner } from "../types/interface";
 
 class API {
-  baseUrl: string;
-
-  garage: string;
-
-  engine: string;
-
-  winners: string;
-
   cars: ICars[];
 
   winnersElements: IWinner[];
 
   constructor() {
-    this.baseUrl = "http://127.0.0.1:3000";
-    this.garage = `${this.baseUrl}/garage`;
-    this.engine = `${this.baseUrl}/engine`;
-    this.winners = `${this.baseUrl}/winners`;
     this.cars = [];
     this.winnersElements = [] as IWinner[];
   }
 
   async get(): Promise<void> {
-    const response = await fetch(`${this.garage}`);
+    const response = await fetch(`${Link.garage}`);
     const content = await response.text();
     this.cars = JSON.parse(content) as ICars[];
   }
 
   async getCarStatus(id: string): Promise<boolean> {
-    const response = await fetch(`${this.garage}/${id}`);
+    const response = await fetch(`${Link.garage}/${id}`);
     return response.ok;
   }
 
   async post(el: ICars): Promise<void> {
-    await fetch(`${this.garage}`, {
+    await fetch(`${Link.garage}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json;charset=utf-8",
@@ -44,20 +33,20 @@ class API {
   }
 
   async delete(id: string): Promise<void> {
-    await fetch(`${this.garage}/${id}`, {
+    await fetch(`${Link.garage}/${id}`, {
       method: "DELETE",
     });
   }
 
   async getCar(id: string): Promise<ICars> {
-    const response = await fetch(`${this.garage}/${id}`);
+    const response = await fetch(`${Link.garage}/${id}`);
     const content = await response.text();
     const car = JSON.parse(content) as ICars;
     return car;
   }
 
   async put(el: ICars): Promise<void> {
-    await fetch(`${this.garage}/${el.id}`, {
+    await fetch(`${Link.garage}/${el.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json;charset=utf-8",
@@ -68,7 +57,7 @@ class API {
 
   async startDrive(el: ICars): Promise<IEngine> {
     const response = (
-      await fetch(`${this.engine}?id=${el.id}&status=started`, {
+      await fetch(`${Link.engine}?id=${el.id}&${StatusEngine.start}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json;charset=utf-8",
@@ -82,7 +71,7 @@ class API {
 
   async stopDrive(el: ICars): Promise<IEngine> {
     const response = (
-      await fetch(`${this.engine}?id=${el.id}&status=stopped`, {
+      await fetch(`${Link.engine}?id=${el.id}&${StatusEngine.stop}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json;charset=utf-8",
@@ -95,9 +84,13 @@ class API {
   }
 
   async engineDrive(id: string): Promise<{ success: boolean }> {
-    const response = await fetch(`${this.engine}?id=${id}&status=drive`, {
-      method: "PATCH",
-    }).catch();
+    const response = await fetch(
+      `${Link.engine}?id=${id}&${StatusEngine.drive}`,
+      {
+        method: "PATCH",
+        // eslint-disable-next-line @typescript-eslint/comma-dangle
+      }
+    ).catch();
     if (response.ok) {
       const json = await response.text();
       const res = JSON.parse(json) as { success: boolean };
@@ -107,7 +100,7 @@ class API {
   }
 
   async createWinner(el: IWinner): Promise<void> {
-    await fetch(`${this.winners}`, {
+    await fetch(`${Link.winners}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json; charset=utf-8",
@@ -117,25 +110,25 @@ class API {
   }
 
   async getWinners(): Promise<void> {
-    const response = await fetch(`${this.winners}`);
+    const response = await fetch(`${Link.winners}`);
     const content = await response.text();
     this.winnersElements = JSON.parse(content) as IWinner[];
   }
 
   async getWinner(id: string): Promise<IWinner> {
-    const response = await fetch(`${this.winners}/${id}`);
+    const response = await fetch(`${Link.winners}/${id}`);
     const content = await response.text();
     const win = JSON.parse(content) as IWinner;
     return win;
   }
 
   async getWinnerStatus(id: string): Promise<boolean> {
-    const response = await fetch(`${this.winners}/${id}`);
+    const response = await fetch(`${Link.winners}/${id}`);
     return response.ok;
   }
 
   async changeWinner(el: IWinner): Promise<void> {
-    await fetch(`${this.winners}/${el.id}`, {
+    await fetch(`${Link.winners}/${el.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json;charset=utf-8",
@@ -145,7 +138,7 @@ class API {
   }
 
   async deleteWinner(id: string): Promise<void> {
-    await fetch(`${this.winners}/${id}`, {
+    await fetch(`${Link.winners}/${id}`, {
       method: "DELETE",
     });
   }

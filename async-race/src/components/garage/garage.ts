@@ -1,5 +1,11 @@
 /* eslint-disable @typescript-eslint/comma-dangle */
-import { ICars, IEngine } from "../../types/interface";
+import { NotesOnPage } from "../../types/enums";
+import {
+  ICars,
+  IEngine,
+  IWriteArray,
+  IWriteElement,
+} from "../../types/interface";
 import API from "../API";
 import UserInterface from "../user-interface";
 import Winners from "../winners/winners";
@@ -104,7 +110,7 @@ class Garage extends API {
     });
   }
 
-  async startDriving(id: string): Promise<{ id: string; time: number }> {
+  async startDriving(id: string): Promise<IWriteElement> {
     const el = await this.getCar(id);
     const obj = (await this.startDrive(el).finally(
       () => {}
@@ -189,8 +195,8 @@ class Garage extends API {
       active.classList.remove("activeList");
     }
     li.classList.add("activeList");
-    const start = (Number(li.innerHTML) - 1) * 7;
-    const end = (Number(li.innerHTML) - 1) * 7 + 7;
+    const start = (Number(li.innerHTML) - 1) * NotesOnPage.car;
+    const end = (Number(li.innerHTML) - 1) * NotesOnPage.car + NotesOnPage.car;
     this.notes = this.cars.slice(start, end);
     await this.buildCarTable(this.notes).finally(() => {});
     const raceBtn = document.getElementById("race") as HTMLInputElement;
@@ -201,7 +207,7 @@ class Garage extends API {
 
   async pagination(): Promise<void> {
     await this.get();
-    const countOfItem: number = Math.ceil(this.cars.length / 7);
+    const countOfItem: number = Math.ceil(this.cars.length / NotesOnPage.car);
     await this.paginationNumberPage(countOfItem);
     const list = document.querySelectorAll(".pagination li");
     const arrowLeft = document.querySelector(
@@ -254,7 +260,7 @@ class Garage extends API {
       stopBtn.forEach((e) => {
         e.disabled = false;
       });
-      const arr: { name: string; id: string; time: number }[] = [];
+      const arr: IWriteArray[] = [];
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       carsOnPage.forEach(async (e) => {
         const id = e.id.replace(/[^0-9]/g, "");
