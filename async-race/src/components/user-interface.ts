@@ -83,7 +83,8 @@ class UserInterface implements INav {
       <input type="submit" value="race" id="race">
       <input type="submit" value="reset" id="reset" disabled>
       <input type="submit" value="generate cars" id="generate">
-  </div>`;
+  </div>
+  <p class="additional">При генерации 100 новых машин, может быть задержка около 10 секунд, пожалуйста подождте=)</p>`;
   }
 
   clickBtn(): void {
@@ -99,10 +100,13 @@ class UserInterface implements INav {
       garage.classList.add("notActive");
       winners.classList.add("active");
     };
-    document.body.onclick = () => {
+    window.onclick = () => {
       (
         document.querySelector(".showWinner") as HTMLParagraphElement
       ).style.visibility = "hidden";
+      (
+        document.querySelector(".showWinner") as HTMLParagraphElement
+      ).innerHTML = "";
     };
   }
 

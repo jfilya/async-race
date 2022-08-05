@@ -9,6 +9,46 @@
 #garage.notActive {
   z-index: 1;
 }
+.btnGarage,
+.btnWinners {
+  padding: 5px 15px;
+  background: blueviolet;
+  margin: 5px;
+}
+.nav {
+  padding: 20px 10px;
+}
+.additional{
+  font-size: 12px;
+  line-height: 13px;
+}
+.btnPagination {
+  background: blueviolet;
+  padding: 3px 20px;
+  margin: 5px;
+  font-size: 20px;
+}
+.listPagination {
+  display: flex;
+  align-items: center;
+}
+.activeList {
+  display: block;
+}
+li {
+  display: none;
+}
+.showWinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+  color: gold;
+  font-style: italic;
+  text-align: center;
+  visibility: hidden;
+}
 .create,
 .update,
 .allBtn {

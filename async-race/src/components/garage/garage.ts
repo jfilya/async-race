@@ -302,6 +302,9 @@ class Garage extends API {
       (
         document.querySelector(".showWinner") as HTMLParagraphElement
       ).style.visibility = "hidden";
+      (
+        document.querySelector(".showWinner") as HTMLParagraphElement
+      ).innerHTML = "";
     };
   }
 
