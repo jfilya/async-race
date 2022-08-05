@@ -32,15 +32,13 @@ class Winners extends API {
     const showWinner = document.querySelector(
       ".showWinner"
     ) as HTMLParagraphElement;
-    const flag = (
-      document.getElementById(`flag${id}`) as HTMLDivElement
-    ).getBoundingClientRect().left;
+    const flagEl = document.getElementById(`flag${id}`) as HTMLDivElement;
+    const flag = flagEl ? flagEl.getBoundingClientRect().left : 0;
     const step = () => {
-      const car = (
-        document.getElementById(`car-${id}`) as HTMLDivElement
-      ).getBoundingClientRect().left;
+      const carEl = document.getElementById(`car-${id}`) as HTMLDivElement;
+      const car = carEl ? carEl.getBoundingClientRect().left : 0;
       if (car < flag) requestAnimationFrame(step);
-      if (car >= flag) {
+      if (car >= flag && car !== 0) {
         const name = (
           document.getElementById(`carName-${id}`) as HTMLSpanElement
         ).innerHTML;

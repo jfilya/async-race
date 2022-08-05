@@ -268,12 +268,14 @@ class Garage extends API {
         const status = await this.engineDrive(id);
         if (!status.success) {
           const car = document.getElementById(`car-${id}`) as HTMLDivElement;
-          const carCoordinates = car.getBoundingClientRect().left;
-          car.style.transform = `translateX(${carCoordinates + 50}px)`;
-          car.style.transition = "5s";
-          window.cancelAnimationFrame(Number(id));
+          if (car) {
+            const carCoordinates = car ? car.getBoundingClientRect().left : 0;
+            car.style.transform = `translateX(${carCoordinates + 50}px)`;
+            car.style.transition = "5s";
+            window.cancelAnimationFrame(Number(id));
+          }
         }
-        if (status.success) {
+        if (status.success && id) {
           this.win.writeWinner(id, element, arr).finally(() => {});
         }
       });
