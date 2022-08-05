@@ -167,8 +167,8 @@ class UserInterface implements INav {
             <th>Number</th>
             <th>Car</th>
             <th>Name</th>
-            <th class="wins-sort">Wins <span class="wins-sort-arrow"> </span></th>
-            <th class="time-sort">Best time <span class="time-sort-arrow"> </span></th>
+            <th class="wins-sort">Wins <span class="wins-arm"> </span></th>
+            <th class="time-sort">Best time <span class="time-arm"> </span></th>
         </tr>
       </thead>
       <tbody class="tbody">

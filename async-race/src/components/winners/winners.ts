@@ -1,4 +1,3 @@
-/* eslint-disable default-case */
 /* eslint-disable @typescript-eslint/comma-dangle */
 import { IWinner } from "../../types/interface";
 import API from "../API";
@@ -96,6 +95,8 @@ class Winners extends API {
         this.interfaceUser.buildWinnersTable(element, car, index + 1);
       }
     });
+    (document.querySelector(".wins-arm") as HTMLSpanElement).innerHTML = "";
+    (document.querySelector(".time-arm") as HTMLSpanElement).innerHTML = "";
   }
 
   async paginationNumberPageWin(count: number): Promise<void> {
@@ -166,15 +167,32 @@ class Winners extends API {
     const bestTime = document.querySelector(
       ".time-sort"
     ) as HTMLTableCellElement;
-    const sortTable = (index: number) => {
-      const sorted = [...trs].sort(
-        (a, b) => +a.cells[index].innerHTML - +b.cells[index].innerHTML
-      );
+    const sortTable = (
+      index: number,
+      sortElement: HTMLTableCellElement,
+      nameClass: string,
+      anotherClass: string
+    ) => {
+      sortElement.classList.toggle("sort-up");
+      (document.querySelector(anotherClass) as HTMLSpanElement).innerHTML = "";
+      let sorted = [] as HTMLTableRowElement[];
+      if (sortElement.classList.contains("sort-up")) {
+        sorted = [...trs].sort(
+          (a, b) => +a.cells[index].innerHTML - +b.cells[index].innerHTML
+        );
+        (document.querySelector(nameClass) as HTMLSpanElement).innerHTML = "↓";
+      }
+      if (!sortElement.classList.contains("sort-up")) {
+        sorted = [...trs].sort(
+          (a, b) => +b.cells[index].innerHTML - +a.cells[index].innerHTML
+        );
+        (document.querySelector(nameClass) as HTMLSpanElement).innerHTML = "↑";
+      }
       tbody.innerHTML = "";
       sorted.forEach((el) => tbody.append(el));
     };
-    winsSort.onclick = () => sortTable(3);
-    bestTime.onclick = () => sortTable(4);
+    winsSort.onclick = () => sortTable(3, winsSort, ".wins-arm", ".time-arm");
+    bestTime.onclick = () => sortTable(4, bestTime, ".time-arm", ".wins-arm");
   }
 }
 
