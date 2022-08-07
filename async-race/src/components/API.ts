@@ -12,9 +12,13 @@ class API {
   }
 
   protected async get(): Promise<void> {
-    const response = await fetch(`${Link.garage}`);
-    const content = await response.text();
-    this.cars = JSON.parse(content) as ICars[];
+    try {
+      const response = await fetch(`${Link.garage}`);
+      const content = await response.text();
+      this.cars = JSON.parse(content) as ICars[];
+    } catch (err) {
+      console.log("Link Error Garage");
+    }
   }
 
   protected async getCarStatus(id: string): Promise<boolean> {
@@ -110,9 +114,13 @@ class API {
   }
 
   protected async getWinners(): Promise<void> {
-    const response = await fetch(`${Link.winners}`);
-    const content = await response.text();
-    this.winnersElements = JSON.parse(content) as IWinner[];
+    try {
+      const response = await fetch(`${Link.winners}`);
+      const content = await response.text();
+      this.winnersElements = JSON.parse(content) as IWinner[];
+    } catch (error) {
+      console.log("Link Error Winners");
+    }
   }
 
   protected async getWinner(id: string): Promise<IWinner> {

@@ -112,9 +112,13 @@ class Winners extends API {
     if (active) {
       active.classList.remove("activeList");
     }
-    li.classList.add("activeList");
-    const start = (Number(li.innerHTML) - 1) * NotesOnPage.win;
-    const end = (Number(li.innerHTML) - 1) * NotesOnPage.win + NotesOnPage.win;
+    if (li) {
+      li.classList.add("activeList");
+    }
+    const start = li ? (Number(li.innerHTML) - 1) * NotesOnPage.win : 0;
+    const end = li
+      ? (Number(li.innerHTML) - 1) * NotesOnPage.win + NotesOnPage.win
+      : 0;
     this.notesWinners = this.winnersElements.slice(start, end);
     await this.buildWinners(this.notesWinners).finally(() => {});
   }

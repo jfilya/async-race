@@ -194,9 +194,13 @@ class Garage extends API {
     if (active) {
       active.classList.remove("activeList");
     }
-    li.classList.add("activeList");
-    const start = (Number(li.innerHTML) - 1) * NotesOnPage.car;
-    const end = (Number(li.innerHTML) - 1) * NotesOnPage.car + NotesOnPage.car;
+    if (li) {
+      li.classList.add("activeList");
+    }
+    const start = li ? (Number(li.innerHTML) - 1) * NotesOnPage.car : 0;
+    const end = li
+      ? (Number(li.innerHTML) - 1) * NotesOnPage.car + NotesOnPage.car
+      : 0;
     this.notes = this.cars.slice(start, end);
     await this.buildCarTable(this.notes).finally(() => {});
     const raceBtn = document.getElementById("race") as HTMLInputElement;
