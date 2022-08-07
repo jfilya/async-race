@@ -11,13 +11,13 @@ import UserInterface from "../user-interface";
 import Winners from "../winners/winners";
 
 class Garage extends API {
-  pageNumber: number;
+  private pageNumber: number;
 
-  interfaceUser: UserInterface;
+  private readonly interfaceUser: UserInterface;
 
-  win: Winners;
+  private readonly win: Winners;
 
-  notes: Array<ICars>;
+  private notes: Array<ICars>;
 
   constructor() {
     super();
@@ -27,7 +27,7 @@ class Garage extends API {
     this.notes = [];
   }
 
-  async buildCarTable(array: ICars[]): Promise<void> {
+  private async buildCarTable(array: ICars[]): Promise<void> {
     await this.get();
     const sTitle = document.querySelector(".amountItems") as HTMLSpanElement;
     sTitle.innerHTML = `(${this.cars.length})`;
@@ -46,7 +46,7 @@ class Garage extends API {
     this.generateRandomCars().finally(() => {});
   }
 
-  async getCars(): Promise<void> {
+  private async getCars(): Promise<void> {
     const create = document.getElementById("create") as HTMLInputElement;
     create.onclick = async () => {
       const createName = document.querySelector("#name") as HTMLInputElement;
@@ -67,7 +67,7 @@ class Garage extends API {
     };
   }
 
-  deleteCar(): void {
+  private deleteCar(): void {
     const btnRemoves = document.querySelectorAll(
       ".removeBtn"
     ) as unknown as HTMLButtonElement[];
@@ -80,7 +80,7 @@ class Garage extends API {
     });
   }
 
-  updateCar(): void {
+  private updateCar(): void {
     const btnSelect = document.querySelectorAll(
       ".selectBtn"
     ) as unknown as HTMLButtonElement[];
@@ -110,7 +110,7 @@ class Garage extends API {
     });
   }
 
-  async startDriving(id: string): Promise<IWriteElement> {
+  private async startDriving(id: string): Promise<IWriteElement> {
     const el = await this.getCar(id);
     const obj = (await this.startDrive(el).finally(
       () => {}
@@ -124,7 +124,7 @@ class Garage extends API {
     };
   }
 
-  async startDrivingOneCar(): Promise<void> {
+  private async startDrivingOneCar(): Promise<void> {
     const startBtn = document.querySelectorAll(
       ".startIcon"
     ) as unknown as HTMLButtonElement[];
@@ -141,7 +141,7 @@ class Garage extends API {
     });
   }
 
-  async animationDrive(time: number, id: string): Promise<void> {
+  private async animationDrive(time: number, id: string): Promise<void> {
     const element = document.getElementById(`car-${id}`) as HTMLDivElement;
     function step() {
       element.style.transform = "translateX(103%)";
@@ -150,7 +150,7 @@ class Garage extends API {
     window.requestAnimationFrame(step);
   }
 
-  async removeDriving(id: string): Promise<void> {
+  private async removeDriving(id: string): Promise<void> {
     const el = await this.getCar(id);
     await this.stopDrive(el).finally(() => {});
     const car = document.getElementById(`car-${id}`) as HTMLDivElement;
@@ -159,7 +159,7 @@ class Garage extends API {
     window.cancelAnimationFrame(Number(id));
   }
 
-  async removeDrivingOneCar(): Promise<void> {
+  private async removeDrivingOneCar(): Promise<void> {
     const stopBtn = document.querySelectorAll(
       ".stopIcon"
     ) as unknown as HTMLButtonElement[];
@@ -176,7 +176,7 @@ class Garage extends API {
     });
   }
 
-  async paginationNumberPage(count: number): Promise<void> {
+  private async paginationNumberPage(count: number): Promise<void> {
     const pagination = document.querySelector(
       ".pagination"
     ) as HTMLUListElement;
@@ -187,7 +187,7 @@ class Garage extends API {
     pagination.innerHTML = paginationNumberOfPage;
   }
 
-  async showPage(li: Element): Promise<void> {
+  private async showPage(li: Element): Promise<void> {
     const active = document.querySelector(
       ".pagination li.activeList"
     ) as HTMLLIElement;
@@ -239,7 +239,7 @@ class Garage extends API {
     this.showPage(list[this.pageNumber]).finally(() => {});
   }
 
-  async race(): Promise<void> {
+  private async race(): Promise<void> {
     const raceBtn = document.getElementById("race") as HTMLInputElement;
     const resetRaceBtn = document.getElementById("reset") as HTMLInputElement;
     const carsOnPage = document.querySelectorAll(
@@ -282,7 +282,7 @@ class Garage extends API {
     };
   }
 
-  async resetRace(): Promise<void> {
+  private async resetRace(): Promise<void> {
     const raceBtn = document.getElementById("race") as HTMLInputElement;
     const resetRaceBtn = document.getElementById("reset") as HTMLInputElement;
     const carsOnPage = document.querySelectorAll(
@@ -316,7 +316,7 @@ class Garage extends API {
     };
   }
 
-  async generateRandomCars(): Promise<void> {
+  private async generateRandomCars(): Promise<void> {
     const generateBtn = document.getElementById("generate") as HTMLInputElement;
     const randomCar = this.interfaceUser.randomCars();
     generateBtn.onclick = async () => {

@@ -2,27 +2,27 @@ import { Link, StatusEngine } from "../types/enums";
 import { ICars, IEngine, IWinner } from "../types/interface";
 
 class API {
-  cars: ICars[];
+  protected cars: ICars[];
 
-  winnersElements: IWinner[];
+  protected winnersElements: IWinner[];
 
   constructor() {
     this.cars = [];
     this.winnersElements = [] as IWinner[];
   }
 
-  async get(): Promise<void> {
+  protected async get(): Promise<void> {
     const response = await fetch(`${Link.garage}`);
     const content = await response.text();
     this.cars = JSON.parse(content) as ICars[];
   }
 
-  async getCarStatus(id: string): Promise<boolean> {
+  protected async getCarStatus(id: string): Promise<boolean> {
     const response = await fetch(`${Link.garage}/${id}`);
     return response.ok;
   }
 
-  async post(el: ICars): Promise<void> {
+  protected async post(el: ICars): Promise<void> {
     await fetch(`${Link.garage}`, {
       method: "POST",
       headers: {
@@ -32,20 +32,20 @@ class API {
     });
   }
 
-  async delete(id: string): Promise<void> {
+  protected async delete(id: string): Promise<void> {
     await fetch(`${Link.garage}/${id}`, {
       method: "DELETE",
     });
   }
 
-  async getCar(id: string): Promise<ICars> {
+  protected async getCar(id: string): Promise<ICars> {
     const response = await fetch(`${Link.garage}/${id}`);
     const content = await response.text();
     const car = JSON.parse(content) as ICars;
     return car;
   }
 
-  async put(el: ICars): Promise<void> {
+  protected async put(el: ICars): Promise<void> {
     await fetch(`${Link.garage}/${el.id}`, {
       method: "PUT",
       headers: {
@@ -55,7 +55,7 @@ class API {
     });
   }
 
-  async startDrive(el: ICars): Promise<IEngine> {
+  protected async startDrive(el: ICars): Promise<IEngine> {
     const response = (
       await fetch(`${Link.engine}?id=${el.id}&${StatusEngine.start}`, {
         method: "PATCH",
@@ -69,7 +69,7 @@ class API {
     return content as unknown as IEngine;
   }
 
-  async stopDrive(el: ICars): Promise<IEngine> {
+  protected async stopDrive(el: ICars): Promise<IEngine> {
     const response = (
       await fetch(`${Link.engine}?id=${el.id}&${StatusEngine.stop}`, {
         method: "PATCH",
@@ -83,7 +83,7 @@ class API {
     return content as unknown as IEngine;
   }
 
-  async engineDrive(id: string): Promise<{ success: boolean }> {
+  protected async engineDrive(id: string): Promise<{ success: boolean }> {
     const response = await fetch(
       `${Link.engine}?id=${id}&${StatusEngine.drive}`,
       {
@@ -99,7 +99,7 @@ class API {
     return { success: false };
   }
 
-  async createWinner(el: IWinner): Promise<void> {
+  protected async createWinner(el: IWinner): Promise<void> {
     await fetch(`${Link.winners}`, {
       method: "POST",
       headers: {
@@ -109,25 +109,25 @@ class API {
     });
   }
 
-  async getWinners(): Promise<void> {
+  protected async getWinners(): Promise<void> {
     const response = await fetch(`${Link.winners}`);
     const content = await response.text();
     this.winnersElements = JSON.parse(content) as IWinner[];
   }
 
-  async getWinner(id: string): Promise<IWinner> {
+  protected async getWinner(id: string): Promise<IWinner> {
     const response = await fetch(`${Link.winners}/${id}`);
     const content = await response.text();
     const win = JSON.parse(content) as IWinner;
     return win;
   }
 
-  async getWinnerStatus(id: string): Promise<boolean> {
+  protected async getWinnerStatus(id: string): Promise<boolean> {
     const response = await fetch(`${Link.winners}/${id}`);
     return response.ok;
   }
 
-  async changeWinner(el: IWinner): Promise<void> {
+  protected async changeWinner(el: IWinner): Promise<void> {
     await fetch(`${Link.winners}/${el.id}`, {
       method: "PUT",
       headers: {
@@ -137,7 +137,7 @@ class API {
     });
   }
 
-  async deleteWinner(id: string): Promise<void> {
+  protected async deleteWinner(id: string): Promise<void> {
     await fetch(`${Link.winners}/${id}`, {
       method: "DELETE",
     });

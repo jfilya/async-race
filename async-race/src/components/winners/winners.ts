@@ -11,11 +11,11 @@ import API from "../API";
 import UserInterface from "../user-interface";
 
 class Winners extends API {
-  interfaceUser: UserInterface;
+  private readonly interfaceUser: UserInterface;
 
-  pageNumberWin: number;
+  private pageNumberWin: number;
 
-  notesWinners: IWinner[];
+  private notesWinners: IWinner[];
 
   constructor() {
     super();
@@ -56,7 +56,7 @@ class Winners extends API {
     step();
   }
 
-  async createWin(e: ICreateWinElement, time: number): Promise<void> {
+  private async createWin(e: ICreateWinElement, time: number): Promise<void> {
     let elementWinner = {
       id: e.id,
       wins: 1,
@@ -77,7 +77,7 @@ class Winners extends API {
     await this.paginationWin().finally(() => {});
   }
 
-  async buildWinners(array: IWinner[]): Promise<void> {
+  private async buildWinners(array: IWinner[]): Promise<void> {
     const table = document.querySelector(".tbody") as HTMLTableSectionElement;
     table.innerHTML = "";
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
@@ -94,7 +94,7 @@ class Winners extends API {
     (document.querySelector(".time-arm") as HTMLSpanElement).innerHTML = "";
   }
 
-  async paginationNumberPageWin(count: number): Promise<void> {
+  private async paginationNumberPageWin(count: number): Promise<void> {
     const pagination = document.querySelector(
       ".paginationWinners"
     ) as HTMLUListElement;
@@ -105,7 +105,7 @@ class Winners extends API {
     pagination.innerHTML = paginationNumberOfPage;
   }
 
-  async showPageWin(li: Element): Promise<void> {
+  private async showPageWin(li: Element): Promise<void> {
     const active = document.querySelector(
       ".paginationWinners li.activeList"
     ) as HTMLLIElement;
