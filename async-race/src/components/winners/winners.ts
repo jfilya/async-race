@@ -37,8 +37,9 @@ class Winners extends API {
     const step = () => {
       const carEl = document.getElementById(`car-${id}`) as HTMLDivElement;
       const car = carEl ? carEl.getBoundingClientRect().left : 0;
-      if (car < flag) requestAnimationFrame(step);
-      if (car >= flag && car !== 0) {
+      if (car < flag) {
+        requestAnimationFrame(step);
+      } else if (car >= flag && car !== 0) {
         const name = (
           document.getElementById(`carName-${id}`) as HTMLSpanElement
         ).innerHTML;
@@ -137,10 +138,12 @@ class Winners extends API {
       "#paginationWinners-next"
     ) as HTMLButtonElement;
     const disableBtn = () => {
-      if (this.pageNumberWin === countOfItem - 1) arrowRight.disabled = true;
-      if (this.pageNumberWin < countOfItem - 1) arrowRight.disabled = false;
-      if (this.pageNumberWin === 0) arrowLeft.disabled = true;
-      if (this.pageNumberWin > 0) arrowLeft.disabled = false;
+      if (this.pageNumberWin === countOfItem - 1) {
+        arrowRight.disabled = true;
+      } else arrowRight.disabled = false;
+      if (this.pageNumberWin === 0) {
+        arrowLeft.disabled = true;
+      } else arrowLeft.disabled = false;
     };
     if (!list[this.pageNumberWin]) {
       this.pageNumberWin -= 1;
@@ -183,8 +186,7 @@ class Winners extends API {
           (a, b) => +a.cells[index].innerHTML - +b.cells[index].innerHTML
         );
         arrow.innerHTML = Arrow.down;
-      }
-      if (!sortElement.classList.contains("sort-up")) {
+      } else if (!sortElement.classList.contains("sort-up")) {
         sorted = [...trs].sort(
           (a, b) => +b.cells[index].innerHTML - +a.cells[index].innerHTML
         );

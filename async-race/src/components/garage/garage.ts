@@ -221,10 +221,12 @@ class Garage extends API {
       "#pagination-next"
     ) as HTMLButtonElement;
     const disableBtn = () => {
-      if (this.pageNumber === countOfItem - 1) arrowRight.disabled = true;
-      if (this.pageNumber < countOfItem - 1) arrowRight.disabled = false;
-      if (this.pageNumber === 0) arrowLeft.disabled = true;
-      if (this.pageNumber > 0) arrowLeft.disabled = false;
+      if (this.pageNumber === countOfItem - 1) {
+        arrowRight.disabled = true;
+      } else arrowRight.disabled = false;
+      if (this.pageNumber === 0) {
+        arrowLeft.disabled = true;
+      } else arrowLeft.disabled = false;
     };
     if (!list[this.pageNumber]) {
       this.pageNumber -= 1;
@@ -278,8 +280,7 @@ class Garage extends API {
             car.style.transition = "5s";
             window.cancelAnimationFrame(Number(id));
           }
-        }
-        if (status.success && id) {
+        } else if (status.success && id) {
           this.win.writeWinner(id, element, arr).finally(() => {});
         }
       });
