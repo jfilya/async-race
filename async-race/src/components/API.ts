@@ -17,7 +17,7 @@ class API {
       const content = await response.text();
       this.cars = JSON.parse(content) as ICars[];
     } catch (err) {
-      console.log("Link Error Garage");
+      console.log("error when requesting a garage");
     }
   }
 
@@ -119,7 +119,7 @@ class API {
       const content = await response.text();
       this.winnersElements = JSON.parse(content) as IWinner[];
     } catch (error) {
-      console.log("Link Error Winners");
+      console.log("error when requesting a winner");
     }
   }
 
