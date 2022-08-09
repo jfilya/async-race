@@ -45,12 +45,18 @@ class Winners extends API {
         ).innerHTML;
         const time = element.id === id ? element.time : 0;
         arr.push({ name, id, time });
-        showWinner.innerHTML = `Winner: ${arr[0].name} <br> time: ${
-          arr[0].time / 1000
-        }s!`;
-        showWinner.style.visibility = "visible";
-        if (arr.length === 1) {
+        const resetRaceBtn = document.getElementById(
+          "reset"
+        ) as HTMLInputElement;
+        if (!resetRaceBtn.disabled && arr.length === 1) {
+          showWinner.innerHTML = `Winner: ${arr[0].name} <br> time: ${
+            arr[0].time / 1000
+          }s!`;
+          showWinner.style.visibility = "visible";
           this.createWin(arr[0], time).finally(() => {});
+        } else if (resetRaceBtn.disabled) {
+          showWinner.style.visibility = "hidden";
+          showWinner.innerHTML = "";
         }
       }
     };

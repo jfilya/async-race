@@ -314,12 +314,6 @@ class Garage extends API {
         const id = e.id.replace(/[^0-9]/g, "");
         this.removeDriving(id).finally(() => {});
       });
-      (
-        document.querySelector(".showWinner") as HTMLParagraphElement
-      ).style.visibility = "hidden";
-      (
-        document.querySelector(".showWinner") as HTMLParagraphElement
-      ).innerHTML = "";
     };
   }
 
