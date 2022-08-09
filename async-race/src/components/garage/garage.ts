@@ -76,6 +76,8 @@ class Garage extends API {
         const el = e.id.replace(/[^0-9]/g, "");
         await this.delete(el);
         await this.pagination();
+        await this.deleteWinner(el);
+        await this.win.paginationWin();
       };
     });
   }
@@ -276,7 +278,7 @@ class Garage extends API {
           const car = document.getElementById(`car-${id}`) as HTMLDivElement;
           if (car) {
             const carCoordinates = car ? car.getBoundingClientRect().left : 0;
-            car.style.transform = `translateX(${carCoordinates + 50}px)`;
+            car.style.transform = `translateX(${carCoordinates}px)`;
             car.style.transition = "5s";
             window.cancelAnimationFrame(Number(id));
           }
