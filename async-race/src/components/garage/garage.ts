@@ -139,6 +139,16 @@ class Garage extends API {
         ) as HTMLButtonElement;
         stopBtn.disabled = false;
         await this.startDriving(id).finally(() => {});
+        const status = await this.engineDrive(id);
+        if (!status.success) {
+          const car = document.getElementById(`car-${id}`) as HTMLDivElement;
+          if (car) {
+            const carCoordinates = car ? car.getBoundingClientRect().left : 0;
+            car.style.transform = `translateX(${carCoordinates}px)`;
+            car.style.transition = "5s";
+            window.cancelAnimationFrame(Number(id));
+          }
+        }
       };
     });
   }
