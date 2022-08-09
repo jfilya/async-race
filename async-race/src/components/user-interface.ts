@@ -64,7 +64,7 @@ class UserInterface implements INav {
   createWinners(): void {
     this.main.append(this.winners);
     this.winners.id = "winners";
-    this.winners.innerHTML = "<h2>winners</h2>";
+    this.winners.innerHTML = "<h2>winners <span class='amountWin'><span></h2>";
   }
 
   createInput(): void {

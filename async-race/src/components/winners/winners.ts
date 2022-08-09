@@ -80,6 +80,8 @@ class Winners extends API {
 
   private async buildWinners(array: IWinner[]): Promise<void> {
     const table = document.querySelector(".tbody") as HTMLTableSectionElement;
+    const sTitle = document.querySelector(".amountWin") as HTMLSpanElement;
+    sTitle.innerHTML = `(${this.winnersElements.length})`;
     table.innerHTML = "";
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     array.forEach(async (element, index) => {
