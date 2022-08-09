@@ -4,10 +4,13 @@
   background: black;
   left: 0;
   padding: 0 20px;
-  height: 95vh;
+  width: 100%;
+  height: 100vh;
 }
 #garage.notActive {
   z-index: 1;
+  height: 0px;
+  overflow: hidden;
 }
 .btnGarage,
 .btnWinners {

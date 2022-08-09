@@ -54,8 +54,8 @@ class UserInterface implements INav {
     cars.className = "carsTable";
     this.garage.append(cars);
     const buttonPrevNext = `<div class="buttonPrevNext">
-      <button class="btnPagination" id="pagination-prev">🢀</button>
-      <button class="btnPagination" id="pagination-next">🢂</button>
+      <button class="btnPagination" id="pagination-prev">prev</button>
+      <button class="btnPagination" id="pagination-next">next</button>
     </div>
     `;
     this.garage.innerHTML += buttonPrevNext;
@@ -144,7 +144,20 @@ class UserInterface implements INav {
           ${this.createColorImg(car.color)}
         </div> 
       </div>
-      <div class="flag" id="flag${car.id}">🏲</div>
+      <div class="flag" id="flag${car.id}">
+      <svg width="82" height="77" viewBox="0 0 82 77" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g clip-path="url(#clip0_201_2)">
+      <path d="M61.7563 0.842264C40.4876 -5.41399 33.0563 24.1829 11.7876 17.9266C15.6313 27.9126 19.4751 37.7782 23.3188 47.7641C44.5876 54.0204 52.0188 24.4235 73.2876 30.6798C69.4438 20.6938 65.6001 10.8282 61.7563 0.842264" fill="white"/>
+      <path d="M9.86553 18.5281L8.7124 19.0093L31.2624 77H32.5437L9.86553 18.5281ZM34.5937 77L11.6593 17.9265L10.6343 18.2875L33.3124 77H34.5937Z" fill="#94989B"/>
+      <path d="M9.86572 18.5282L10.6345 18.2876L9.86572 18.5282ZM33.3126 77.0001L10.6345 18.2876L9.86572 18.5282L32.5438 77.0001H33.3126Z" fill="#D0D0D0"/>
+      </g>
+      <defs>
+      <clipPath id="clip0_201_2">
+      <rect width="82" height="77" fill="white"/>
+      </clipPath>
+      </defs>
+      </svg>
+      </div>
     </div>
     </div>         
     `;
@@ -175,8 +188,8 @@ class UserInterface implements INav {
       </tbody>
     </table>
     <div class="buttonPrevNext">
-    <button class="btnPagination" id="paginationWinners-prev">🢀</button>
-    <button class="btnPagination" id="paginationWinners-next">🢂</button>
+    <button class="btnPagination" id="paginationWinners-prev">prev</button>
+    <button class="btnPagination" id="paginationWinners-next">next</button>
   </div>`;
   }
 
