@@ -10,7 +10,7 @@
 Используется Eslint с руководством по стилю Airbnb.
 
 ## Key skills
-  -[x] Сommunication with a server (fetch, REST API)
-  -[x] Async coding / Promises
-  -[x] JS Animations
-  -[x] DOM Api
+  -Сommunication with a server (fetch, REST API)
+  -Async coding / Promises
+  -JS Animations
+  -DOM Api
