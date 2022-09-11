@@ -9,8 +9,8 @@
 Используется Webpack. (Должен быть один HTML-файл, JS-файл и один CSS-файл).
 Используется Eslint с руководством по стилю Airbnb.
 
-Key skills
-Сommunication with a server (fetch, REST API)
-Async coding / Promises
-JS Animations
-DOM Api
+## Key skills
+  -[x] Сommunication with a server (fetch, REST API)
+  -[x] Async coding / Promises
+  -[x] JS Animations
+  -[x] DOM Api
