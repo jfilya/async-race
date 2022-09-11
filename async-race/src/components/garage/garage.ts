@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/comma-dangle */
 import { NotesOnPage } from "../../types/enums";
 import {
   ICars,
@@ -279,7 +278,6 @@ class Garage extends API {
         e.disabled = false;
       });
       const arr: IWriteArray[] = [];
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       carsOnPage.forEach(async (e) => {
         const id = e.id.replace(/[^0-9]/g, "");
         const element = await this.startDriving(id).finally(() => {});

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/comma-dangle */
 import { Arrow, NotesOnPage } from "../../types/enums";
 import {
   ICreateWinElement,
@@ -89,7 +88,6 @@ class Winners extends API {
     const sTitle = document.querySelector(".amountWin") as HTMLSpanElement;
     sTitle.innerHTML = `(${this.winnersElements.length})`;
     table.innerHTML = "";
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     array.forEach(async (element, index) => {
       const status = await this.getCarStatus(element.id);
       if (!status) {

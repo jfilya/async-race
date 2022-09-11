@@ -36,7 +36,9 @@
           {
             "endOfLine": "auto"
           }
-        ]
+        ],
+        "@typescript-eslint/comma-dangle": "off",
+        "@typescript-eslint/no-misused-promises": "off"
   },
   "ignorePatterns": [".html", "webpack.config.js"]
 }

@@ -2,9 +2,9 @@ import { Link, StatusEngine } from "../types/enums";
 import { ICars, IEngine, IWinner } from "../types/interface";
 
 class API {
-  protected cars: ICars[];
+  protected cars: ICars[] = [];
 
-  protected winnersElements: IWinner[];
+  protected winnersElements: IWinner[] = [];
 
   constructor() {
     this.cars = [];
