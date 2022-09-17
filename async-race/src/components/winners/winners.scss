@@ -1,0 +1,28 @@
+#winners {
+  z-index: 1;
+  position: absolute;
+  left: 0;
+  padding: 0 20px;
+  width: 100%;
+  height: 100vh;
+}
+#winners.active {
+  z-index: 2;
+  background: black;
+}
+table {
+  width: 500px;
+}
+thead {
+  background: blueviolet;
+}
+.listPaginationWinners {
+  display: flex;
+}
+td {
+  text-align: center;
+}
+.wins-sort,
+.time-sort {
+  cursor: pointer;
+}
